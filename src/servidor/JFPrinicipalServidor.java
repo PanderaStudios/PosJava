@@ -208,6 +208,15 @@ public class JFPrinicipalServidor extends javax.swing.JFrame {
                 System.out.println("Deseja Criar o Arquivo?");
             }
 
+            try {
+                ControleProduto.carregarDadosProduto();
+                txtStatus.setText("ONLINE");
+                } catch (ClassNotFoundException ex) {
+                txtStatus.setText("OFFLINE");
+                    Logger.getLogger(JFPrinicipalServidor.class.getName()).log(Level.SEVERE, null, ex);
+                }finally{
+                System.out.println("Deseja Criar o Arquivo?");
+            }
                 System.out.println("Cheguei Aqui 2.2");
 
                 

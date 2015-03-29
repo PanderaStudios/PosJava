@@ -55,7 +55,7 @@ public class JFPrincipal extends javax.swing.JFrame {
 
     protected TableModel getDadosTabelaCPF(){
         ArrayList<Cliente> lista = obterTodos();
-        String [] titulos = {"COD"};
+        String [] titulos = {"CPF"};
         Object[] [] valores = new Object[lista.size()][1];
         for(int i = 0; i < lista.size(); i++){
             valores[i][0]= lista.get(i).getCpf();
@@ -143,6 +143,9 @@ public class JFPrincipal extends javax.swing.JFrame {
         jTableCliente = new javax.swing.JTable();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTableProduto = new javax.swing.JTable();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        btmSair = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         mnuIncluirCliente = new javax.swing.JMenuItem();
@@ -165,12 +168,26 @@ public class JFPrincipal extends javax.swing.JFrame {
         mnuSair = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Pandera Studios Cliente");
 
         jTableCliente.setModel(getDadosTabela());
         jScrollPane1.setViewportView(jTableCliente);
 
         jTableProduto.setModel(getDadosTabelaProduto());
         jScrollPane2.setViewportView(jTableProduto);
+
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel1.setText("CLIENTES");
+
+        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel2.setText("PRODUTOS");
+
+        btmSair.setText("SAIR");
+        btmSair.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btmSairActionPerformed(evt);
+            }
+        });
 
         jMenu1.setText("Clientes");
 
@@ -304,15 +321,33 @@ public class JFPrincipal extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 247, Short.MAX_VALUE)
-                .addGap(21, 21, 21)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addGap(49, 49, 49)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(btmSair)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel1))
+                        .addGap(40, 40, 40)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel2)
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 252, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(44, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 295, Short.MAX_VALUE)
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(jLabel2))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 326, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(btmSair)
+                .addContainerGap(23, Short.MAX_VALUE))
         );
 
         pack();
@@ -372,25 +407,22 @@ public class JFPrincipal extends javax.swing.JFrame {
 
     private void mnuIncluirProdutoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuIncluirProdutoActionPerformed
         // TODO add your handling code here:
-        String cod = JOptionPane.showInputDialog("COD","");
+        String cod = JOptionPane.showInputDialog("CPF","");
         
-//        JFCodigoCliente codigo = new JFCodigoCliente(this, true);
-//        codigo.setVisible(true);
-        // Modal -> Fica parado aqui até a janela "sumir"
         persistirProduto(null, ""+cod);
         atualizarTabelaProduto();
     }//GEN-LAST:event_mnuIncluirProdutoActionPerformed
 
     private void mnuAlterarProdutoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuAlterarProdutoActionPerformed
         // TODO add your handling code here:
-        String cod = JOptionPane.showInputDialog("COD","");
+        String cod = JOptionPane.showInputDialog("CPF","");
         persistirProduto(obterProduto(cod), cod);
         atualizarTabelaProduto();
     }//GEN-LAST:event_mnuAlterarProdutoActionPerformed
 
     private void mnuExcluirProdutoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuExcluirProdutoActionPerformed
         // TODO add your handling code here:
-        String cod = JOptionPane.showInputDialog("COD","");
+        String cod = JOptionPane.showInputDialog("CPF","");
         removerProduto(cod);
         atualizarTabelaProduto();
     }//GEN-LAST:event_mnuExcluirProdutoActionPerformed
@@ -402,13 +434,13 @@ public class JFPrincipal extends javax.swing.JFrame {
 
     private void mnuArmazenarProdutosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuArmazenarProdutosActionPerformed
         // TODO add your handling code here:
-        atualizarTabela();
+        atualizarTabelaProduto();
         try {
             ControleProduto.armazenarDadosProduto();
         } catch (IOException ex) {
             Logger.getLogger(JFPrincipal.class.getName()).log(Level.SEVERE, null, ex);
         }
-        atualizarTabela();
+        atualizarTabelaProduto();
     }//GEN-LAST:event_mnuArmazenarProdutosActionPerformed
 
     private void mnuRecuperarProdutosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuRecuperarProdutosActionPerformed
@@ -420,8 +452,16 @@ public class JFPrincipal extends javax.swing.JFrame {
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(JFPrincipal.class.getName()).log(Level.SEVERE, null, ex);
         }
-        atualizarTabela();
+        atualizarTabelaProduto();
     }//GEN-LAST:event_mnuRecuperarProdutosActionPerformed
+
+    private void btmSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btmSairActionPerformed
+        // TODO add your handling code here:
+        jTableCliente.removeAll();
+        jTableProduto.removeAll();
+        System.exit(0);
+
+    }//GEN-LAST:event_btmSairActionPerformed
 
     /**
      * @param args the command line arguments
@@ -459,6 +499,9 @@ public class JFPrincipal extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btmSair;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
