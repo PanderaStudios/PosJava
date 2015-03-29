@@ -66,19 +66,14 @@ public class JDDadosProduto extends javax.swing.JDialog {
         lblCODProduto = new javax.swing.JLabel();
         btmCancelar = new javax.swing.JButton();
         txtCODCli = new javax.swing.JTextField();
-        jComboBox1 = new javax.swing.JComboBox();
+
+        setTitle("Pandera Studios Produto");
 
         lblNomeProduto.setText("Nome");
 
         lblQtdProduto.setText("Qtd");
 
         lblValorProduto.setText("Valor");
-
-        txtNomeProduto.setText("jTextField2");
-
-        txtQtdProduto.setText("jTextField3");
-
-        txtValorProduto.setText("jTextField4");
 
         btmConfirmar.setText("Confirmar");
         btmConfirmar.addActionListener(new java.awt.event.ActionListener() {
@@ -98,49 +93,44 @@ public class JDDadosProduto extends javax.swing.JDialog {
 
         txtCODCli.setEditable(false);
         txtCODCli.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        txtCODCli.setText("jTextField1");
+        txtCODCli.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtCODCliActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addGap(30, 30, 30)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblValorProduto)
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblValorProduto)
+                            .addComponent(lblQtdProduto)
+                            .addComponent(lblNomeProduto)
+                            .addComponent(lblCODProduto))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(lblQtdProduto)
-                                    .addComponent(lblNomeProduto)
-                                    .addComponent(lblCODProduto))
-                                .addGap(18, 18, 18)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(btmConfirmar)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(btmCancelar))
-                                    .addComponent(txtNomeProduto, javax.swing.GroupLayout.DEFAULT_SIZE, 177, Short.MAX_VALUE)
-                                    .addComponent(txtQtdProduto)
-                                    .addComponent(txtValorProduto)))))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(46, 46, 46)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(10, 10, 10)
-                                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(txtCODCli, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(28, Short.MAX_VALUE))
+                                .addComponent(btmConfirmar)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(btmCancelar))
+                            .addComponent(txtNomeProduto)
+                            .addComponent(txtQtdProduto)
+                            .addComponent(txtValorProduto, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtCODCli, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(54, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(txtCODCli, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(5, 5, 5)
+                .addGap(25, 25, 25)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblCODProduto)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtCODCli, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblNomeProduto)
@@ -172,6 +162,10 @@ public class JDDadosProduto extends javax.swing.JDialog {
         sucesso = false;
         setVisible(false);
     }//GEN-LAST:event_btmCancelarActionPerformed
+
+    private void txtCODCliActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCODCliActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtCODCliActionPerformed
 
     /**
      * @param args the command line arguments
@@ -221,7 +215,6 @@ public class JDDadosProduto extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btmCancelar;
     private javax.swing.JButton btmConfirmar;
-    private javax.swing.JComboBox jComboBox1;
     private javax.swing.JLabel lblCODProduto;
     private javax.swing.JLabel lblNomeProduto;
     private javax.swing.JLabel lblQtdProduto;

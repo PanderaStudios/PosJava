@@ -66,7 +66,7 @@ public class JFPrincipal extends javax.swing.JFrame {
     protected TableModel getDadosTabelaProduto  (){
         ArrayList<Produto> lista = obterTodosProdutos();
         String [] titulos = 
-               {"COD","Nome","Quantidade","Valor"};
+               {"CPF","Nome","Quant","Valor"};
         Object[][] valores = new Object[lista.size()][4];
         for(int i = 0; i < lista.size(); i++){
             valores[i][0] = lista.get(i).getCOD();
@@ -376,12 +376,12 @@ public class JFPrincipal extends javax.swing.JFrame {
 
     private void mnuArmazenarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuArmazenarClienteActionPerformed
            
-        atualizarTabela();
         try {
             ControleCliente.armazenarDados();
         } catch (IOException ex) {
             Logger.getLogger(JFPrincipal.class.getName()).log(Level.SEVERE, null, ex);
         }
+        atualizarTabela();
     }//GEN-LAST:event_mnuArmazenarClienteActionPerformed
 
     private void mnuRecuperarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuRecuperarClienteActionPerformed
@@ -407,24 +407,86 @@ public class JFPrincipal extends javax.swing.JFrame {
 
     private void mnuIncluirProdutoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuIncluirProdutoActionPerformed
         // TODO add your handling code here:
-        String cod = JOptionPane.showInputDialog("CPF","");
-        
-        persistirProduto(null, ""+cod);
-        atualizarTabelaProduto();
+
+        boolean fim = false; // controla saida do loop
+        String cod = ""; // recebe codigo digitado
+        TableModel cod1; // tabela com todos os cpfs dos clientes
+            cod1 = getDadosTabelaCPF();
+            // loop enquanto teclar vazio ou not fim 
+        while(cod.isEmpty() || !fim ){
+            cod = JOptionPane.showInputDialog("CPF","");
+    
+            // varre a table e acha o cpf == nao lembro como acha o fim do string
+            for (int x=0; x<cod1.getRowCount()-1 ;x++){
+            if (cod.equals(cod1.getValueAt(x, 0))){
+                // se achar persisti a entrada
+                persistirProduto(null, ""+cod);
+                atualizarTabelaProduto();
+                fim = true;
+                break;
+            }
+        }
+            // ENQUANTO NAO ENCONTRA JOGA MENSAGEM DE ERRO.
+            if (!fim)
+                JOptionPane.showMessageDialog(null, "Cliente nao encontrado!!!", "Servidor",
+                    JOptionPane.INFORMATION_MESSAGE);
+        }
     }//GEN-LAST:event_mnuIncluirProdutoActionPerformed
 
     private void mnuAlterarProdutoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuAlterarProdutoActionPerformed
         // TODO add your handling code here:
-        String cod = JOptionPane.showInputDialog("CPF","");
-        persistirProduto(obterProduto(cod), cod);
-        atualizarTabelaProduto();
+        boolean fim = false; // controla saida do loop
+        String cod = ""; // recebe codigo digitado
+        TableModel cod1; // tabela com todos os cpfs dos clientes
+            cod1 = getDadosTabelaCPF();
+            // loop enquanto teclar vazio ou not fim 
+        while(cod.isEmpty() || !fim ){
+            cod = JOptionPane.showInputDialog("CPF","");
+    
+            // varre a table e acha o cpf == nao lembro como acha o fim do string
+            for (int x=0; x<cod1.getRowCount()-1 ;x++){
+            if (cod.equals(cod1.getValueAt(x, 0))){
+                // se achar persisti a entrada
+                persistirProduto(obterProduto(cod), cod);
+                atualizarTabelaProduto();
+                fim = true;
+                break;
+            }
+        }
+            // ENQUANTO NAO ENCONTRA JOGA MENSAGEM DE ERRO.
+            if (!fim)
+                JOptionPane.showMessageDialog(null, "Cliente nao encontrado!!!", "Servidor",
+                    JOptionPane.INFORMATION_MESSAGE);
+        }
     }//GEN-LAST:event_mnuAlterarProdutoActionPerformed
+
+    //        
 
     private void mnuExcluirProdutoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuExcluirProdutoActionPerformed
         // TODO add your handling code here:
-        String cod = JOptionPane.showInputDialog("CPF","");
-        removerProduto(cod);
-        atualizarTabelaProduto();
+        boolean fim = false; // controla saida do loop
+        String cod = ""; // recebe codigo digitado
+        TableModel cod1; // tabela com todos os cpfs dos clientes
+            cod1 = getDadosTabelaCPF();
+            // loop enquanto teclar vazio ou not fim 
+        while(cod.isEmpty() || !fim ){
+            cod = JOptionPane.showInputDialog("CPF","");
+    
+            // varre a table e acha o cpf == nao lembro como acha o fim do string
+            for (int x=0; x<cod1.getRowCount()-1 ;x++){
+            if (cod.equals(cod1.getValueAt(x, 0))){
+                // se achar remove
+                removerProduto(cod);
+                atualizarTabelaProduto();
+                fim = true;
+                break;
+            }
+        }
+            // ENQUANTO NAO ENCONTRA JOGA MENSAGEM DE ERRO.
+            if (!fim)
+                JOptionPane.showMessageDialog(null, "Cliente nao encontrado!!!", "Servidor",
+                    JOptionPane.INFORMATION_MESSAGE);
+        }
     }//GEN-LAST:event_mnuExcluirProdutoActionPerformed
 
     private void mnuAtualizarProdutoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuAtualizarProdutoActionPerformed
@@ -434,7 +496,7 @@ public class JFPrincipal extends javax.swing.JFrame {
 
     private void mnuArmazenarProdutosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuArmazenarProdutosActionPerformed
         // TODO add your handling code here:
-        atualizarTabelaProduto();
+
         try {
             ControleProduto.armazenarDadosProduto();
         } catch (IOException ex) {

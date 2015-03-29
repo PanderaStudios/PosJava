@@ -64,6 +64,7 @@ public class JDDadosCliente extends javax.swing.JDialog {
         jButton2 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Pandera Studios Cliente");
 
         jLabel1.setText("CPF");
 
@@ -73,13 +74,11 @@ public class JDDadosCliente extends javax.swing.JDialog {
 
         jLabel4.setText("Telefone");
 
-        txtCPF.setText("jTextField1");
-
-        txtNome.setText("jTextField2");
-
-        txtEndereco.setText("jTextField3");
-
-        txtTelefone.setText("jTextField4");
+        txtNome.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtNomeActionPerformed(evt);
+            }
+        });
 
         jButton1.setText("Confirmar");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -118,7 +117,7 @@ public class JDDadosCliente extends javax.swing.JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addGap(26, 26, 26)
                 .addComponent(jButton1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 38, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 74, Short.MAX_VALUE)
                 .addComponent(jButton2)
                 .addGap(42, 42, 42))
         );
@@ -160,6 +159,10 @@ public class JDDadosCliente extends javax.swing.JDialog {
         sucesso = false;
         setVisible(false);
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void txtNomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNomeActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtNomeActionPerformed
 
     /**
      * @param args the command line arguments
