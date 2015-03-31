@@ -14,9 +14,9 @@ import modelo.Cliente;
  */
 public class JDDadosCliente extends javax.swing.JDialog {
 
-    public void setDados(Cliente c){
+    public void setDados(Cliente c, String cpf){
         txtCPF.setText(
-           (c==null)?"":c.getCpf());
+           (c==null)?cpf:c.getCpf());
         txtNome.setText(
            (c==null)?"":c.getNome());
         txtEndereco.setText(
@@ -37,6 +37,8 @@ public class JDDadosCliente extends javax.swing.JDialog {
         
     /**
      * Creates new form JDDados
+     * @param parent
+     * @param modal
      */
     public JDDadosCliente(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
@@ -73,6 +75,9 @@ public class JDDadosCliente extends javax.swing.JDialog {
         jLabel3.setText("Endereco");
 
         jLabel4.setText("Telefone");
+
+        txtCPF.setEditable(false);
+        txtCPF.setEnabled(false);
 
         txtNome.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

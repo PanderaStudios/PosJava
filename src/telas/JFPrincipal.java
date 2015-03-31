@@ -3,17 +3,18 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package telas;
 
 import controle.ControleCliente;
 import controle.ControleProduto;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
+import static javax.swing.JOptionPane.CANCEL_OPTION;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import modelo.Cliente;
@@ -25,109 +26,113 @@ import modelo.Produto;
  */
 public class JFPrincipal extends javax.swing.JFrame {
 
-    protected ControleCliente cCliente = 
-              new ControleCliente();
-    
-    protected ControleProduto pProduto = 
-              new ControleProduto();
+    protected ControleCliente cCliente
+            = new ControleCliente();
 
-    protected ArrayList<Cliente> obterTodos(){
-        return cCliente.obterTodos(); 
-    }
-    
-    protected ArrayList<Produto> obterTodosProdutos(){
-        return pProduto.obterTodosProduto(); 
+    protected ControleProduto pProduto
+            = new ControleProduto();
+
+    protected ArrayList<Cliente> obterTodos() {
+        return cCliente.obterTodos();
     }
 
-    protected TableModel getDadosTabela(){
+    protected ArrayList<Produto> obterTodosProdutos() {
+        return pProduto.obterTodosProduto();
+    }
+
+    protected TableModel getDadosTabela() {
         ArrayList<Cliente> lista = obterTodos();
-        String [] titulos = 
-               {"CPF","Nome","Endereco","Telefone"};
+        String[] titulos
+                = {"CPF", "Nome", "Endereco", "Telefone"};
         Object[][] valores = new Object[lista.size()][4];
-        for(int i = 0; i < lista.size(); i++){
+        for (int i = 0; i < lista.size(); i++) {
             valores[i][0] = lista.get(i).getCpf();
             valores[i][1] = lista.get(i).getNome();
             valores[i][2] = lista.get(i).getEndereco();
             valores[i][3] = lista.get(i).getTelefone();
         }
-        return new DefaultTableModel(valores,titulos);
+        return new DefaultTableModel(valores, titulos);
     }
 
-    protected TableModel getDadosTabelaCPF(){
+    protected TableModel getDadosTabelaCPF() {
         ArrayList<Cliente> lista = obterTodos();
-        String [] titulos = {"CPF"};
-        Object[] [] valores = new Object[lista.size()][1];
-        for(int i = 0; i < lista.size(); i++){
-            valores[i][0]= lista.get(i).getCpf();
+        String[] titulos = {"CPF"};
+        Object[][] valores = new Object[lista.size()][1];
+        for (int i = 0; i < lista.size(); i++) {
+            valores[i][0] = lista.get(i).getCpf();
         }
-        return new DefaultTableModel(valores,titulos);
+        return new DefaultTableModel(valores, titulos);
     }
 
-    protected TableModel getDadosTabelaProduto  (){
+    protected TableModel getDadosTabelaProduto() {
         ArrayList<Produto> lista = obterTodosProdutos();
-        String [] titulos = 
-               {"CPF","Nome","Quant","Valor"};
+        String[] titulos
+                = {"CPF", "Nome", "Quant", "Valor"};
         Object[][] valores = new Object[lista.size()][4];
-        for(int i = 0; i < lista.size(); i++){
+        for (int i = 0; i < lista.size(); i++) {
             valores[i][0] = lista.get(i).getCOD();
             valores[i][1] = lista.get(i).getNome();
             valores[i][2] = lista.get(i).getQuantidade();
             valores[i][3] = lista.get(i).getValor();
         }
-        return new DefaultTableModel(valores,titulos);
+        return new DefaultTableModel(valores, titulos);
     }
 
-    private void atualizarTabela(){
+    private void atualizarTabela() {
         jTableCliente.setModel(getDadosTabela());
     }
-    
-    private void atualizarTabelaProduto(){
+
+    private void atualizarTabelaProduto() {
         jTableProduto.setModel(getDadosTabelaProduto());
     }
-    
-    protected void persistir(Cliente c){
+
+    protected void persistir(Cliente c, String cpf) {
         JDDadosCliente dados = new JDDadosCliente(this, true);
-        dados.setDados(c);
+        dados.setDados(c, cpf);
         dados.setVisible(true);
         // Modal -> Fica parado aqui até a janela "sumir"
-        if(dados.sucesso)
+        if (dados.sucesso) {
             cCliente.persistir(dados.getDados());
+        }
     }
-    
-    protected void persistirProduto(Produto p, String cod){
+
+    protected void persistirProduto(Produto p, String cod) {
         JDDadosProduto dados = new JDDadosProduto(this, true);
         dados.setDados(p, cod);
         dados.setVisible(true);
         // Modal -> Fica parado aqui até a janela "sumir"
-        if(dados.sucesso)
+        if (dados.sucesso) {
             pProduto.persistirProduto(dados.getDados());
+        }
     }
 
-    protected void remover(String cpf){
+    protected void remover(String cpf) {
         cCliente.remover(cpf);
     }
-    
-    protected void removerProduto(String cpf){
+
+    protected void removerProduto(String cpf) {
         pProduto.removerProduto(cpf);
     }
 
-    protected Cliente obter(String cpf){
+    protected Cliente obter(String cpf) {
         return cCliente.obter(cpf);
     }
-    
-    protected Produto obterProduto(String cpf){
+
+    protected Produto obterProduto(String cpf) {
         return pProduto.obterProduto(cpf);
     }
 
-    protected void preActions(){
+    protected void preActions() {
+//     cpf = ""; // recebera codigo digitado
+
     }
-    
+
     /**
      * Creates new form JFPrincipal
      */
     public JFPrincipal() {
         preActions();
-        initComponents();        
+        initComponents();
     }
 
     /**
@@ -358,24 +363,37 @@ public class JFPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_mnuAtualizarClienteActionPerformed
 
     private void mnuIncluirClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuIncluirClienteActionPerformed
-        persistir(null);
-        atualizarTabela();
+        String cpf = entraCPF(true); // recebera codigo digitado
+        if (cpf != null) {
+            if (!cpf.isEmpty()) {
+                persistir(null, cpf);
+                atualizarTabela();
+            }
+        }
     }//GEN-LAST:event_mnuIncluirClienteActionPerformed
 
     private void mnuAlterarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuAlterarClienteActionPerformed
-        String cpf = JOptionPane.showInputDialog("CPF","");
-        persistir(obter(cpf));
-        atualizarTabela();
+        String cpf = entraCPF(false); // recebera codigo digitado
+        if (cpf != null) {
+            if (!cpf.isEmpty()) {
+                persistir(obter(cpf), cpf);
+                atualizarTabela();
+            }
+        }
     }//GEN-LAST:event_mnuAlterarClienteActionPerformed
 
     private void mnuExcluirClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuExcluirClienteActionPerformed
-        String cpf = JOptionPane.showInputDialog("CPF","");
-        remover(cpf);
-        atualizarTabela();
+        String cpf = entraCPF(false); // recebera codigo digitado
+        if (cpf != null) {
+            if (!cpf.isEmpty()) {
+                remover(cpf);
+                atualizarTabela();
+            }
+        }
     }//GEN-LAST:event_mnuExcluirClienteActionPerformed
 
     private void mnuArmazenarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuArmazenarClienteActionPerformed
-           
+
         try {
             ControleCliente.armazenarDados();
         } catch (IOException ex) {
@@ -385,7 +403,7 @@ public class JFPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_mnuArmazenarClienteActionPerformed
 
     private void mnuRecuperarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuRecuperarClienteActionPerformed
-        
+
         try {
             ControleCliente.carregarDados();
         } catch (IOException ex) {
@@ -408,55 +426,23 @@ public class JFPrincipal extends javax.swing.JFrame {
     private void mnuIncluirProdutoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuIncluirProdutoActionPerformed
         // TODO add your handling code here:
 
-        boolean fim = false; // controla saida do loop
-        String cod = ""; // recebe codigo digitado
-        TableModel cod1; // tabela com todos os cpfs dos clientes
-            cod1 = getDadosTabelaCPF();
-            // loop enquanto teclar vazio ou not fim 
-        while(cod.isEmpty() || !fim ){
-            cod = JOptionPane.showInputDialog("CPF","");
-    
-            // varre a table e acha o cpf == nao lembro como acha o fim do string
-            for (int x=0; x<cod1.getRowCount()-1 ;x++){
-            if (cod.equals(cod1.getValueAt(x, 0))){
-                // se achar persisti a entrada
-                persistirProduto(null, ""+cod);
+        String cpf = entraCPF(false); // recebera codigo digitado
+        if (cpf != null) {
+            if (!cpf.isEmpty()) {
+                persistirProduto(null, cpf);
                 atualizarTabelaProduto();
-                fim = true;
-                break;
             }
-        }
-            // ENQUANTO NAO ENCONTRA JOGA MENSAGEM DE ERRO.
-            if (!fim)
-                JOptionPane.showMessageDialog(null, "Cliente nao encontrado!!!", "Servidor",
-                    JOptionPane.INFORMATION_MESSAGE);
         }
     }//GEN-LAST:event_mnuIncluirProdutoActionPerformed
 
     private void mnuAlterarProdutoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuAlterarProdutoActionPerformed
         // TODO add your handling code here:
-        boolean fim = false; // controla saida do loop
-        String cod = ""; // recebe codigo digitado
-        TableModel cod1; // tabela com todos os cpfs dos clientes
-            cod1 = getDadosTabelaCPF();
-            // loop enquanto teclar vazio ou not fim 
-        while(cod.isEmpty() || !fim ){
-            cod = JOptionPane.showInputDialog("CPF","");
-    
-            // varre a table e acha o cpf == nao lembro como acha o fim do string
-            for (int x=0; x<cod1.getRowCount()-1 ;x++){
-            if (cod.equals(cod1.getValueAt(x, 0))){
-                // se achar persisti a entrada
-                persistirProduto(obterProduto(cod), cod);
+        String cpf = entraCPF(false); // recebera codigo digitado
+        if (cpf != null) {
+            if (!cpf.isEmpty()) {
+                persistirProduto(obterProduto(cpf), cpf);
                 atualizarTabelaProduto();
-                fim = true;
-                break;
             }
-        }
-            // ENQUANTO NAO ENCONTRA JOGA MENSAGEM DE ERRO.
-            if (!fim)
-                JOptionPane.showMessageDialog(null, "Cliente nao encontrado!!!", "Servidor",
-                    JOptionPane.INFORMATION_MESSAGE);
         }
     }//GEN-LAST:event_mnuAlterarProdutoActionPerformed
 
@@ -464,28 +450,12 @@ public class JFPrincipal extends javax.swing.JFrame {
 
     private void mnuExcluirProdutoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuExcluirProdutoActionPerformed
         // TODO add your handling code here:
-        boolean fim = false; // controla saida do loop
-        String cod = ""; // recebe codigo digitado
-        TableModel cod1; // tabela com todos os cpfs dos clientes
-            cod1 = getDadosTabelaCPF();
-            // loop enquanto teclar vazio ou not fim 
-        while(cod.isEmpty() || !fim ){
-            cod = JOptionPane.showInputDialog("CPF","");
-    
-            // varre a table e acha o cpf == nao lembro como acha o fim do string
-            for (int x=0; x<cod1.getRowCount()-1 ;x++){
-            if (cod.equals(cod1.getValueAt(x, 0))){
-                // se achar remove
-                removerProduto(cod);
+        String cpf = entraCPF(false); // recebera codigo digitado
+        if (cpf != null) {
+            if (!cpf.isEmpty()) {
+                removerProduto(cpf);
                 atualizarTabelaProduto();
-                fim = true;
-                break;
             }
-        }
-            // ENQUANTO NAO ENCONTRA JOGA MENSAGEM DE ERRO.
-            if (!fim)
-                JOptionPane.showMessageDialog(null, "Cliente nao encontrado!!!", "Servidor",
-                    JOptionPane.INFORMATION_MESSAGE);
         }
     }//GEN-LAST:event_mnuExcluirProdutoActionPerformed
 
@@ -524,6 +494,52 @@ public class JFPrincipal extends javax.swing.JFrame {
         System.exit(0);
 
     }//GEN-LAST:event_btmSairActionPerformed
+
+    private String entraCPF(boolean isIncluir) {
+        // TODO add your handling code here:
+        String codProduto = "";
+        ArrayList<Cliente> cpfCod = (obterTodos());
+
+        boolean isCadastro = false;
+        
+        // loop enquanto teclar vazio ou not fim 
+        while (codProduto.isEmpty() || true) {
+            // janela de input do CPF
+            codProduto = JOptionPane.showInputDialog(this, "CPF");
+            if (codProduto == null) {
+                return null;
+            } else if (codProduto.isEmpty()) {
+                // ENQUANTO NAO ENCONTRA JOGA MENSAGEM DE ERRO e VOLTA AO LOOP.
+                JOptionPane.showMessageDialog(null, "Por Favor, Digite Algo!", "Msg do Servidor",
+                        JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                for (Cliente cpfCod1 : cpfCod) {
+                    if (codProduto.equals(cpfCod1.getCpf())) {
+                        if (isIncluir) {
+                            // ENQUANTO NAO ENCONTRA JOGA MENSAGEM DE ERRO e VOLTA AO LOOP.
+                            JOptionPane.showMessageDialog(null, "Cliente Ja Cadastrado!!!", "Msg do Servidor",
+                                    JOptionPane.INFORMATION_MESSAGE);
+                            isCadastro = true;
+                            break;
+                        } else {
+                            return codProduto;
+                        }
+                    }
+                    isCadastro = false;
+                }
+
+                if (!isIncluir) {
+                    // ENQUANTO NAO ENCONTRA JOGA MENSAGEM DE ERRO e VOLTA AO LOOP.
+                    JOptionPane.showMessageDialog(null, "Cliente nao encontrado!!!", "Msg do Servidor",
+                            JOptionPane.INFORMATION_MESSAGE);
+                } else { if (!isCadastro)
+                    return codProduto;
+                }
+            }
+
+        }
+        return codProduto;
+    }
 
     /**
      * @param args the command line arguments

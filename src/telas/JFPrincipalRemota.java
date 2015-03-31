@@ -29,7 +29,7 @@ public class JFPrincipalRemota extends JFPrincipal {
 
     protected void persistir(Cliente c) {
         JDDadosCliente dados = new JDDadosCliente(this, true);
-        dados.setDados(c);
+        dados.setDados(c,"");
         dados.setVisible(true);
         // Modal -> Fica parado aqui até a janela "sumir"
         if (dados.sucesso) {
@@ -43,7 +43,7 @@ public class JFPrincipalRemota extends JFPrincipal {
 
     protected void persistirProduto(Produto p) {
         JDDadosProduto dados = new JDDadosProduto(this, true);
-        dados.setDados(p, "");
+        dados.setDados(p, "bbb");
         dados.setVisible(true);
         // Modal -> Fica parado aqui até a janela "sumir"
         if (dados.sucesso) {

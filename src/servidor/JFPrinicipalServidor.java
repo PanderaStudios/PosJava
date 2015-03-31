@@ -79,7 +79,7 @@ public class JFPrinicipalServidor extends javax.swing.JFrame {
 
         jcomboEscolhaServidor.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "unesa", "Pander 1", "Pander 2", " " }));
 
-        jlbClientes.setText("Clientes");
+        jlbClientes.setText("IPs dos Clientes que ja se Conectaram");
 
         jlistIPClientes.setModel(listaA  );
         jscrolIpClientes.setViewportView(jlistIPClientes);

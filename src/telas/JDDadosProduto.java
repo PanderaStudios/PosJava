@@ -17,35 +17,32 @@ public class JDDadosProduto extends javax.swing.JDialog {
     public boolean sucesso = false;
 
 //    private ControleProduto pProduto;
-
-        public void setDados(Produto p, String cod){
-            txtCODCli.setText((p==null)?cod:p.getCOD());
-            txtNomeProduto.setText((p==null)?"":p.getNome());
-            txtQtdProduto.setText((String) ((p==null)?"":p.getQuantidade()));
-            txtValorProduto.setText((String) ((p==null)?"":p.getValor()));
-            txtCODCli.setEditable(false);
+    public void setDados(Produto p, String cod) {
+        txtCODCli.setText((p == null) ? cod : p.getCOD());
+        txtNomeProduto.setText((p == null) ? "" : p.getNome());
+        txtQtdProduto.setText((String) ((p == null) ? "" : p.getQuantidade()));
+        txtValorProduto.setText((String) ((p == null) ? "" : p.getValor()));
+        txtCODCli.setEditable(false);
     }
 
-      public Produto getDados(){
+    public Produto getDados() {
         return new Produto(
-            txtCODCli.getText(),
-            txtNomeProduto.getText(),
-            txtQtdProduto.getText(),
-            txtValorProduto.getText());
+                txtCODCli.getText(),
+                txtNomeProduto.getText(),
+                txtQtdProduto.getText(),
+                txtValorProduto.getText());
     }
-    
-  
-    
+
     /**
      * Creates new form JDDadosProduto
+     *
      * @param parent
      * @param modal
      */
-    public JDDadosProduto(java.awt.Frame parent, boolean modal      ) {
-            super(parent, modal);
-            initComponents();
+    public JDDadosProduto(java.awt.Frame parent, boolean modal) {
+        super(parent, modal);
+        initComponents();
     }
-
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -93,6 +90,7 @@ public class JDDadosProduto extends javax.swing.JDialog {
 
         txtCODCli.setEditable(false);
         txtCODCli.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        txtCODCli.setEnabled(false);
         txtCODCli.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtCODCliActionPerformed(evt);
@@ -170,7 +168,6 @@ public class JDDadosProduto extends javax.swing.JDialog {
     /**
      * @param args the command line arguments
      */
-    
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -210,8 +207,8 @@ public class JDDadosProduto extends javax.swing.JDialog {
             }
         });
     }
-    
-    
+
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btmCancelar;
     private javax.swing.JButton btmConfirmar;
