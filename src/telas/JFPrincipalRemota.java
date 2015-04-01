@@ -27,9 +27,10 @@ public class JFPrincipalRemota extends JFPrincipal {
         }
     }
 
-    protected void persistir(Cliente c) {
+    @Override
+    protected void persistir(Cliente c, String cpf) {
         JDDadosCliente dados = new JDDadosCliente(this, true);
-        dados.setDados(c,"");
+        dados.setDados(c,cpf);
         dados.setVisible(true);
         // Modal -> Fica parado aqui até a janela "sumir"
         if (dados.sucesso) {
@@ -41,9 +42,9 @@ public class JFPrincipalRemota extends JFPrincipal {
         }
     }
 
-    protected void persistirProduto(Produto p) {
+    protected void persistirProduto(Produto p, String cpf) {
         JDDadosProduto dados = new JDDadosProduto(this, true);
-        dados.setDados(p, "bbb");
+        dados.setDados(p, cpf);
         dados.setVisible(true);
         // Modal -> Fica parado aqui até a janela "sumir"
         if (dados.sucesso) {

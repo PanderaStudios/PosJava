@@ -70,7 +70,7 @@ public class JFPrincipal extends javax.swing.JFrame {
                 = {"CPF", "Nome", "Quant", "Valor"};
         Object[][] valores = new Object[lista.size()][4];
         for (int i = 0; i < lista.size(); i++) {
-            valores[i][0] = lista.get(i).getCOD();
+            valores[i][0] = lista.get(i).getCpf();
             valores[i][1] = lista.get(i).getNome();
             valores[i][2] = lista.get(i).getQuantidade();
             valores[i][3] = lista.get(i).getValor();
@@ -275,7 +275,6 @@ public class JFPrincipal extends javax.swing.JFrame {
         jMenu2.setText("Outros");
 
         mnuArmazenarCliente.setText("Armazenar Dados Clientes");
-        mnuArmazenarCliente.setEnabled(false);
         mnuArmazenarCliente.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 mnuArmazenarClienteActionPerformed(evt);

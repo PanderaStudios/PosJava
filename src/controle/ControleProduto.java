@@ -35,16 +35,16 @@ public class ControleProduto {
     }
     
     public void persistirProduto(Produto produto){
-        bancoProdutos.put(produto.getCOD(), produto);
+        bancoProdutos.put(produto.getCpf(), produto);
     }
     
-    public void removerProduto(String cod){
-        bancoProdutos.remove(cod);
+    public void removerProduto(String cpf){
+        bancoProdutos.remove(cpf);
     }
     
-    public Produto obterProduto(String cod){
-        if(bancoProdutos.containsKey(cod))
-            return bancoProdutos.get(cod);
+    public Produto obterProduto(String cpf){
+        if(bancoProdutos.containsKey(cpf))
+            return bancoProdutos.get(cpf);
         else 
             return null;
     }
