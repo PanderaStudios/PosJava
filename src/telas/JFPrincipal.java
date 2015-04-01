@@ -5,75 +5,94 @@
  */
 package telas;
 
-import controle.ControleCliente;
-import controle.ControleProduto;
+import controle.ControleBancoDados;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
-import static javax.swing.JOptionPane.CANCEL_OPTION;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
-import modelo.Cliente;
-import modelo.Produto;
+import modelo.BancoDados;
 
 /**
  *
- * @author aluno
+ * @author Grupo
  */
 public class JFPrincipal extends javax.swing.JFrame {
 
-    protected ControleCliente cCliente
-            = new ControleCliente();
+    protected ControleBancoDados cCliente
+            = new ControleBancoDados();
 
-    protected ControleProduto pProduto
-            = new ControleProduto();
-
-    protected ArrayList<Cliente> obterTodos() {
+    protected ArrayList<BancoDados> obterTodos() {
         return cCliente.obterTodos();
     }
 
-    protected ArrayList<Produto> obterTodosProdutos() {
-        return pProduto.obterTodosProduto();
-    }
+    //protected ArrayList<BancoDados> obterTodosP() {
+    //    return cCliente.obterTodosP();
+    //}
 
     protected TableModel getDadosTabela() {
-        ArrayList<Cliente> lista = obterTodos();
+//        int contador = 0;
+        ArrayList<BancoDados> lista = obterTodos();
         String[] titulos
-                = {"CPF", "Nome", "Endereco", "Telefone"};
-        Object[][] valores = new Object[lista.size()][4];
+                = {"CPF", "Tipo", "Nome", "Endereco", "Telefone"};
+    
+        Object[][] valores = new Object[lista.size()][5];
         for (int i = 0; i < lista.size(); i++) {
             valores[i][0] = lista.get(i).getCpf();
-            valores[i][1] = lista.get(i).getNome();
-            valores[i][2] = lista.get(i).getEndereco();
-            valores[i][3] = lista.get(i).getTelefone();
+            valores[i][1] = lista.get(i).getTipo();
+            valores[i][2] = lista.get(i).getNome();
+            valores[i][3] = lista.get(i).getEnder_Quant();
+            valores[i][4] = lista.get(i).getTelef_Valor();
+//            if ("C".equals(lista.get(i).getTipo())) {
+//                contador++;
+//            }
         }
+
+/*        Object[][] valores = new Object[contador][5];
+        int contador2 = 0;
+        for (BancoDados lista1 : lista) {
+            if ("C".equals(lista1.getTipo())) {
+                valores[contador2][0] = lista1.getCpf();
+                valores[contador2][1] = lista1.getTipo();
+                valores[contador2][2] = lista1.getNome();
+                valores[contador2][3] = lista1.getEnder_Quant();
+                valores[contador2][4] = lista1.getTelef_Valor();
+            }
+        }
+  */
         return new DefaultTableModel(valores, titulos);
     }
 
     protected TableModel getDadosTabelaCPF() {
-        ArrayList<Cliente> lista = obterTodos();
+        ArrayList<BancoDados> lista = obterTodos();
         String[] titulos = {"CPF"};
         Object[][] valores = new Object[lista.size()][1];
         for (int i = 0; i < lista.size(); i++) {
-            valores[i][0] = lista.get(i).getCpf();
+            if (lista.get(i).getTipo() == "C") {
+                valores[i][0] = lista.get(i).getCpf();
+            }
         }
         return new DefaultTableModel(valores, titulos);
     }
 
     protected TableModel getDadosTabelaProduto() {
-        ArrayList<Produto> lista = obterTodosProdutos();
+//        int contador = 0;
+        ArrayList<BancoDados> lista = obterTodos();
         String[] titulos
-                = {"CPF", "Nome", "Quant", "Valor"};
-        Object[][] valores = new Object[lista.size()][4];
+                = {"CPF", "Tipo", "Nome", "Quant", "Valor"};
+        Object[][] valores = new Object[lista.size()][5];
         for (int i = 0; i < lista.size(); i++) {
-            valores[i][0] = lista.get(i).getCpf();
-            valores[i][1] = lista.get(i).getNome();
-            valores[i][2] = lista.get(i).getQuantidade();
-            valores[i][3] = lista.get(i).getValor();
+//            if (lista.get(i).getTipo() == "P") 
+            {
+                valores[i][0] = lista.get(i).getCpf();
+                valores[i][1] = lista.get(i).getTipo();
+                valores[i][2] = lista.get(i).getNome();
+                valores[i][3] = lista.get(i).getEnder_Quant();
+                valores[i][4] = lista.get(i).getTelef_Valor();
+//                contador++;
+            }
         }
         return new DefaultTableModel(valores, titulos);
     }
@@ -82,13 +101,12 @@ public class JFPrincipal extends javax.swing.JFrame {
         jTableCliente.setModel(getDadosTabela());
     }
 
-    private void atualizarTabelaProduto() {
-        jTableProduto.setModel(getDadosTabelaProduto());
-    }
-
-    protected void persistir(Cliente c, String cpf) {
-        JDDadosCliente dados = new JDDadosCliente(this, true);
-        dados.setDados(c, cpf);
+//    private void atualizarTabelaProduto() {
+//        jTableProduto.setModel(getDadosTabelaProduto());
+//    }
+    protected void persistir(BancoDados c, String cpf, String tipo) {
+        JDDados dados = new JDDados(this, true);
+        dados.setDados(c, cpf, tipo);
         dados.setVisible(true);
         // Modal -> Fica parado aqui até a janela "sumir"
         if (dados.sucesso) {
@@ -96,31 +114,33 @@ public class JFPrincipal extends javax.swing.JFrame {
         }
     }
 
-    protected void persistirProduto(Produto p, String cod) {
-        JDDadosProduto dados = new JDDadosProduto(this, true);
-        dados.setDados(p, cod);
-        dados.setVisible(true);
-        // Modal -> Fica parado aqui até a janela "sumir"
-        if (dados.sucesso) {
-            pProduto.persistirProduto(dados.getDados());
-        }
-    }
-
+    /*    protected void persistirProduto(Produto p, String cod) {
+     JDDadosProduto dados = new JDDadosProduto(this, true);
+     dados.setDados(p, cod);
+     dados.setVisible(true);
+     // Modal -> Fica parado aqui até a janela "sumir"
+     if (dados.sucesso) {
+     pProduto.persistirProduto(dados.getDados());
+     }
+     }
+     */
     protected void remover(String cpf) {
         cCliente.remover(cpf);
     }
 
-    protected void removerProduto(String cpf) {
-        pProduto.removerProduto(cpf);
-    }
-
-    protected Cliente obter(String cpf) {
+//    protected void removerProduto(String cpf) {
+//        pProduto.removerProduto(cpf);
+//    }
+    protected BancoDados obter(String cpf) {
         return cCliente.obter(cpf);
     }
 
-    protected Produto obterProduto(String cpf) {
-        return pProduto.obterProduto(cpf);
+    protected String obterTipo(String cpf) {
+        return cCliente.obter(cpf).getTipo();
     }
+//    protected Produto obterProduto(String cpf) {
+//        return pProduto.obterProduto(cpf);
+//    }
 
     protected void preActions() {
 //     cpf = ""; // recebera codigo digitado
@@ -365,7 +385,7 @@ public class JFPrincipal extends javax.swing.JFrame {
         String cpf = entraCPF(true); // recebera codigo digitado
         if (cpf != null) {
             if (!cpf.isEmpty()) {
-                persistir(null, cpf);
+                persistir(null, cpf, "C");
                 atualizarTabela();
             }
         }
@@ -375,8 +395,10 @@ public class JFPrincipal extends javax.swing.JFrame {
         String cpf = entraCPF(false); // recebera codigo digitado
         if (cpf != null) {
             if (!cpf.isEmpty()) {
-                persistir(obter(cpf), cpf);
-                atualizarTabela();
+                if ("C".equals(obterTipo(cpf))) {
+                    persistir(obter(cpf), cpf, "C");
+                    atualizarTabela();
+                }
             }
         }
     }//GEN-LAST:event_mnuAlterarClienteActionPerformed
@@ -385,29 +407,29 @@ public class JFPrincipal extends javax.swing.JFrame {
         String cpf = entraCPF(false); // recebera codigo digitado
         if (cpf != null) {
             if (!cpf.isEmpty()) {
-                remover(cpf);
-                atualizarTabela();
+                if ("C".equals(obterTipo(cpf))) {
+                    remover(cpf);
+                    atualizarTabela();
+                }
             }
         }
     }//GEN-LAST:event_mnuExcluirClienteActionPerformed
 
     private void mnuArmazenarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuArmazenarClienteActionPerformed
 
+        atualizarTabela();
         try {
-            ControleCliente.armazenarDados();
+            ControleBancoDados.armazenarDados();
         } catch (IOException ex) {
             Logger.getLogger(JFPrincipal.class.getName()).log(Level.SEVERE, null, ex);
         }
-        atualizarTabela();
     }//GEN-LAST:event_mnuArmazenarClienteActionPerformed
 
     private void mnuRecuperarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuRecuperarClienteActionPerformed
 
         try {
-            ControleCliente.carregarDados();
-        } catch (IOException ex) {
-            Logger.getLogger(JFPrincipal.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
+            ControleBancoDados.carregarDados();
+        } catch (IOException | ClassNotFoundException ex) {
             Logger.getLogger(JFPrincipal.class.getName()).log(Level.SEVERE, null, ex);
         }
         atualizarTabela(); // estava faltando isso para recuperar a tabela.
@@ -428,8 +450,8 @@ public class JFPrincipal extends javax.swing.JFrame {
         String cpf = entraCPF(false); // recebera codigo digitado
         if (cpf != null) {
             if (!cpf.isEmpty()) {
-                persistirProduto(null, cpf);
-                atualizarTabelaProduto();
+                persistir(null, cpf, "P");
+                atualizarTabela();
             }
         }
     }//GEN-LAST:event_mnuIncluirProdutoActionPerformed
@@ -439,8 +461,10 @@ public class JFPrincipal extends javax.swing.JFrame {
         String cpf = entraCPF(false); // recebera codigo digitado
         if (cpf != null) {
             if (!cpf.isEmpty()) {
-                persistirProduto(obterProduto(cpf), cpf);
-                atualizarTabelaProduto();
+                if ("P".equals(obterTipo(cpf))) {
+                    persistir(obter(cpf), cpf, "P");
+                    atualizarTabela();
+                }
             }
         }
     }//GEN-LAST:event_mnuAlterarProdutoActionPerformed
@@ -452,38 +476,38 @@ public class JFPrincipal extends javax.swing.JFrame {
         String cpf = entraCPF(false); // recebera codigo digitado
         if (cpf != null) {
             if (!cpf.isEmpty()) {
-                removerProduto(cpf);
-                atualizarTabelaProduto();
+                if ("P".equals(obterTipo(cpf))) {
+                    remover(cpf);
+                    atualizarTabela();
+                }
             }
         }
     }//GEN-LAST:event_mnuExcluirProdutoActionPerformed
 
     private void mnuAtualizarProdutoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuAtualizarProdutoActionPerformed
         // TODO add your handling code here:
-        atualizarTabelaProduto();
+        atualizarTabela();
     }//GEN-LAST:event_mnuAtualizarProdutoActionPerformed
 
     private void mnuArmazenarProdutosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuArmazenarProdutosActionPerformed
         // TODO add your handling code here:
 
+        atualizarTabela();
         try {
-            ControleProduto.armazenarDadosProduto();
+            ControleBancoDados.armazenarDados();
         } catch (IOException ex) {
             Logger.getLogger(JFPrincipal.class.getName()).log(Level.SEVERE, null, ex);
         }
-        atualizarTabelaProduto();
     }//GEN-LAST:event_mnuArmazenarProdutosActionPerformed
 
     private void mnuRecuperarProdutosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuRecuperarProdutosActionPerformed
         // TODO add your handling code here:
         try {
-            ControleProduto.carregarDadosProduto();
-        } catch (IOException ex) {
-            Logger.getLogger(JFPrincipal.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
+            ControleBancoDados.carregarDados();
+        } catch (IOException | ClassNotFoundException ex) {
             Logger.getLogger(JFPrincipal.class.getName()).log(Level.SEVERE, null, ex);
         }
-        atualizarTabelaProduto();
+        atualizarTabela();
     }//GEN-LAST:event_mnuRecuperarProdutosActionPerformed
 
     private void btmSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btmSairActionPerformed
@@ -496,24 +520,25 @@ public class JFPrincipal extends javax.swing.JFrame {
 
     private String entraCPF(boolean isIncluir) {
         // TODO add your handling code here:
-        String codProduto = "";
-        ArrayList<Cliente> cpfCod = (obterTodos());
-
+        String cpf = "";
         boolean isCadastro = false;
         
+        ArrayList<BancoDados> cpfCod = (obterTodos());
+
         // loop enquanto teclar vazio ou not fim 
-        while (codProduto.isEmpty() || true) {
+        while (cpf.isEmpty() || true) {
             // janela de input do CPF
-            codProduto = JOptionPane.showInputDialog(this, "CPF");
-            if (codProduto == null) {
+            cpf = JOptionPane.showInputDialog(this, "CPF");
+            if (cpf == null) {
                 return null;
-            } else if (codProduto.isEmpty()) {
-                // ENQUANTO NAO ENCONTRA JOGA MENSAGEM DE ERRO e VOLTA AO LOOP.
+            } else if (cpf.isEmpty()) {
+                // SE DER <ENTER> JOGA MENSAGEM DE ERRO e VOLTA AO LOOP.
                 JOptionPane.showMessageDialog(null, "Por Favor, Digite Algo!", "Msg do Servidor",
                         JOptionPane.INFORMATION_MESSAGE);
             } else {
-                for (Cliente cpfCod1 : cpfCod) {
-                    if (codProduto.equals(cpfCod1.getCpf())) {
+                
+                for (BancoDados cpfCod1 : cpfCod) {
+                    if (cpf.equals(cpfCod1.getCpf())) {
                         if (isIncluir) {
                             // ENQUANTO NAO ENCONTRA JOGA MENSAGEM DE ERRO e VOLTA AO LOOP.
                             JOptionPane.showMessageDialog(null, "Cliente Ja Cadastrado!!!", "Msg do Servidor",
@@ -521,7 +546,7 @@ public class JFPrincipal extends javax.swing.JFrame {
                             isCadastro = true;
                             break;
                         } else {
-                            return codProduto;
+                            return cpf;
                         }
                     }
                     isCadastro = false;
@@ -531,44 +556,26 @@ public class JFPrincipal extends javax.swing.JFrame {
                     // ENQUANTO NAO ENCONTRA JOGA MENSAGEM DE ERRO e VOLTA AO LOOP.
                     JOptionPane.showMessageDialog(null, "Cliente nao encontrado!!!", "Msg do Servidor",
                             JOptionPane.INFORMATION_MESSAGE);
-                } else { if (!isCadastro)
-                    return codProduto;
+                } else {
+                    if (!isCadastro) {
+                        return cpf;
+                    }
                 }
             }
 
         }
-        return codProduto;
+        return cpf;
     }
 
     /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(JFPrincipal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(JFPrincipal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(JFPrincipal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(JFPrincipal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
+       
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
+         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new JFPrincipal().setVisible(true);
             }

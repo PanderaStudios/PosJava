@@ -5,8 +5,7 @@
  */
 package servidor;
 
-import controle.ControleCliente;
-import controle.ControleProduto;
+import controle.ControleBancoDados;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.util.logging.Level;
@@ -24,10 +23,11 @@ public class JFPrinicipalServidor extends javax.swing.JFrame {
 
     private int numClientes;
     private ServerSocket s0;
+
     /**
      * Creates new form JFPrinicipalServidor
      */
-    public JFPrinicipalServidor() {        
+    public JFPrinicipalServidor() {
         preActions();
         initComponents();
         txtStatus.setText("OFFLINE");
@@ -35,16 +35,16 @@ public class JFPrinicipalServidor extends javax.swing.JFrame {
 
     }
 
-    private void preActions(){
+    private void preActions() {
         numClientes = 0;
-        listaA = new DefaultListModel<String> ();    
+        listaA = new DefaultListModel<String>();
         try {
             s0 = new ServerSocket(5050);
         } catch (IOException ex) {
             Logger.getLogger(JFPrinicipalServidor.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -189,56 +189,53 @@ public class JFPrinicipalServidor extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btmIniciarServicoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btmIniciarServicoActionPerformed
-        // TODO add your handling code here:
-
-        
-        if (listaA == null)        
+        // TODO add your handling code here:        
+        if (listaA == null) {
             preActions();
+        }
 
         try {
             System.out.println("Cheguei Aqui 2.1");
-        
+
             try {
-                ControleCliente.carregarDados();
+//                ControleBancoDados.carregarDados();
                 txtStatus.setText("ONLINE");
-                } catch (ClassNotFoundException ex) {
-                txtStatus.setText("OFFLINE");
-                    Logger.getLogger(JFPrinicipalServidor.class.getName()).log(Level.SEVERE, null, ex);
-                }finally{
+//            } catch (ClassNotFoundException ex) {
+//                txtStatus.setText("OFFLINE");
+//                Logger.getLogger(JFPrinicipalServidor.class.getName()).log(Level.SEVERE, null, ex);
+            } finally {
                 System.out.println("Deseja Criar o Arquivo?");
             }
 
-                System.out.println("Cheguei Aqui 2.2");
+            System.out.println("Cheguei Aqui 2.2");
 
-                
-            
             JOptionPane.showMessageDialog(null, "Servidor Correndo", "Servidor",
-                JOptionPane.INFORMATION_MESSAGE);
+                    JOptionPane.INFORMATION_MESSAGE);
 
-            while (true)
-            {
+            btmIniciarServico.setEnabled(false);
+            btmPararServico.setEnabled(true);
+            btmFechar.setEnabled(true);
+            
+            while (true) {
                 new ThCliente(s0.accept()).start();
 
                 numClientes++;
-                listaA.insertElementAt(numClientes + " - IP: " + s0.getInetAddress(),0);
+                listaA.insertElementAt(numClientes + " - IP: " + s0.getInetAddress(), 0);
                 txtNumClientes.setText("" + numClientes);
-                
+
                 JOptionPane.showMessageDialog(null,
-                    "Cliente:" + s0.getInetAddress() + "Esta Conectado a Porta: " + s0.getLocalPort(),
-                    "Cliente Conectado", JOptionPane.INFORMATION_MESSAGE);
+                        "Cliente:" + s0.getInetAddress() + "Esta Conectado a Porta: " + s0.getLocalPort(),
+                        "Cliente Conectado", JOptionPane.INFORMATION_MESSAGE);
 
 //                JOptionPane.getFrameForComponent(this).repaint();
-
                 System.out.println("ip>" + s0.getInetAddress());
-                                
+
             }
         } catch (IOException ex) {
             Logger.getLogger(JFPrinicipalServidor.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        btmIniciarServico.setEnabled(false);
-        btmPararServico.setEnabled(true);
-        btmFechar.setEnabled(true);
+
     }//GEN-LAST:event_btmIniciarServicoActionPerformed
 
     private void btmFecharActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btmFecharActionPerformed
@@ -246,10 +243,10 @@ public class JFPrinicipalServidor extends javax.swing.JFrame {
         try {
             // TODO add your handling code here:
             s0.close();
-            
+
         } catch (IOException ex) {
             Logger.getLogger(JFPrinicipalServidor.class.getName()).log(Level.SEVERE, null, ex);
-        }finally{
+        } finally {
             txtStatus.setText("OFFLINE");
         }
         listaA.clear();

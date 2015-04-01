@@ -4,13 +4,13 @@ import comum.controle.ControleComunicacao;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.ArrayList;
-import modelo.Cliente;
-import modelo.Produto;
+import modelo.BancoDados;
 
 public class JFPrincipalRemota extends JFPrincipal {
 
     ControleComunicacao c2;
 
+//    @Override
     protected void remover(String cpf) {
         try {
             c2.enviarTexto("R");
@@ -19,18 +19,10 @@ public class JFPrincipalRemota extends JFPrincipal {
         }
     }
 
-    protected void removerProduto(String cpf) {
-        try {
-            c2.enviarTexto("RR");
-            c2.enviarTexto(cpf);
-        } catch (IOException ex) {
-        }
-    }
-
-    @Override
-    protected void persistir(Cliente c, String cpf) {
-        JDDadosCliente dados = new JDDadosCliente(this, true);
-        dados.setDados(c,cpf);
+//    @Override
+    protected void persistir(BancoDados c, String cpf, String tipo) {
+        JDDados dados = new JDDados(this, true);
+        dados.setDados(c, cpf, tipo);
         dados.setVisible(true);
         // Modal -> Fica parado aqui até a janela "sumir"
         if (dados.sucesso) {
@@ -42,62 +34,29 @@ public class JFPrincipalRemota extends JFPrincipal {
         }
     }
 
-    protected void persistirProduto(Produto p, String cpf) {
-        JDDadosProduto dados = new JDDadosProduto(this, true);
-        dados.setDados(p, cpf);
-        dados.setVisible(true);
-        // Modal -> Fica parado aqui até a janela "sumir"
-        if (dados.sucesso) {
-            try {
-                c2.enviarTexto("PP");
-                c2.enviarObjeto(dados.getDados());
-            } catch (IOException ex) {
-            }
-        }
-    }
-
-    protected Cliente obter(String cpf) {
+  
+    protected BancoDados obter(String cpf) {
         try {
             c2.enviarTexto("O");
             c2.enviarTexto(cpf);
-            return (Cliente) c2.receberObjeto();
-        } catch (Exception ex) {
+            return (BancoDados) c2.receberObjeto();
+        } catch (IOException | ClassNotFoundException ex) {
             return null;
         }
     }
 
-    protected Produto obterProduto(String cpf) {
-        try {
-            c2.enviarTexto("OO");
-            c2.enviarTexto(cpf);
-            return (Produto) c2.receberObjeto();
-        } catch (Exception ex) {
-            return null;
-        }
-    }
 
-    protected ArrayList<Cliente> obterTodos() {
+    @Override
+    protected ArrayList<BancoDados> obterTodos() {
         try {
             c2.enviarTexto("T");
-            return (ArrayList<Cliente>) c2.receberObjeto();
-        } catch (Exception ex) {
-            return new ArrayList<Cliente>();
+            return (ArrayList<BancoDados>) c2.receberObjeto();
+        } catch (IOException | ClassNotFoundException ex) {
+            return new ArrayList<BancoDados>();
         }
     }
 
-    /**
-     *
-     * @return
-     */
-    protected ArrayList<Produto> obterTodosProduto() {
-        try {
-            c2.enviarTexto("TT");
-            return (ArrayList<Produto>) c2.receberObjeto();
-        } catch (Exception ex) {
-            return new ArrayList<Produto>();
-        }
-    }
-
+    @Override
     protected void preActions() {
         try {
             Socket s2 = new Socket("127.0.0.1", 5050);
@@ -107,7 +66,6 @@ public class JFPrincipalRemota extends JFPrincipal {
     }
 
     public static void main(String args[]) {
-
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
