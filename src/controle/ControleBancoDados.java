@@ -19,7 +19,7 @@ public class ControleBancoDados {
     public static void carregarDados() throws IOException, ClassNotFoundException{
         
         try (ObjectInputStream ois = new ObjectInputStream(
-                new FileInputStream("\\temp\\Banco_Dados.bin"))) {
+                new FileInputStream("Banco_Dados.bin"))) {
             bancoDados = (HashMap<String, BancoDados>)
                     ois.readObject();
         }
@@ -27,7 +27,7 @@ public class ControleBancoDados {
     
     public static void armazenarDados() throws IOException{
         try (ObjectOutputStream oos = new ObjectOutputStream(
-                new FileOutputStream("\\temp\\Banco_Dados.bin"))) {
+                new FileOutputStream("Banco_Dados.bin"))) {
             oos.writeObject(bancoDados);
             oos.flush();
         }
@@ -35,6 +35,10 @@ public class ControleBancoDados {
     
     public void persistir(BancoDados dados){
         bancoDados.put(dados.getCpf(), dados);
+    }
+    
+    public void alterar(BancoDados dados){
+        bancoDados.replace(dados.getCpf(), dados);
     }
     
     public void remover(String cpf){

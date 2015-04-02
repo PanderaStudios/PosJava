@@ -21,11 +21,11 @@ import modelo.BancoDados;
  */
 public class JFPrincipal extends javax.swing.JFrame {
 
-    protected ControleBancoDados cCliente
+    protected ControleBancoDados dDados
             = new ControleBancoDados();
 
     protected ArrayList<BancoDados> obterTodos() {
-        return cCliente.obterTodos();
+        return dDados.obterTodos();
     }
 
     public final String CLIENTE = "C";
@@ -63,8 +63,9 @@ public class JFPrincipal extends javax.swing.JFrame {
         return new DefaultTableModel(valores, titulos);
     }
 
-    private void atualizarTabela(String tipo) {
-        jTableCliente.setModel(getDadosTabela(tipo));
+    private void atualizarTabela() {
+        jTableCliente.setModel(getDadosTabela(CLIENTE));
+        jTableProduto.setModel(getDadosTabela(PRODUTO));
     }
 
     protected void persistir(BancoDados c, String cpf, String tipo) {
@@ -73,20 +74,20 @@ public class JFPrincipal extends javax.swing.JFrame {
         dados.setVisible(true);
         // Modal -> Fica parado aqui até a janela "sumir"
         if (dados.sucesso) {
-            cCliente.persistir(dados.getDados());
+            dDados.persistir(dados.getDados());
         }
     }
 
     protected void remover(String cpf) {
-        cCliente.remover(cpf);
+        dDados.remover(cpf);
     }
 
     protected BancoDados obter(String cpf) {
-        return cCliente.obter(cpf);
+        return dDados.obter(cpf);
     }
 
     protected String obterTipo(String cpf) {
-        return cCliente.obter(cpf).getTipo();
+        return dDados.obter(cpf).getTipo();
     }
 
     protected void preActions() {
@@ -326,7 +327,7 @@ public class JFPrincipal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void mnuAtualizarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuAtualizarClienteActionPerformed
-        atualizarTabela(CLIENTE);
+        atualizarTabela();
     }//GEN-LAST:event_mnuAtualizarClienteActionPerformed
 
     private void mnuIncluirClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuIncluirClienteActionPerformed
@@ -334,7 +335,7 @@ public class JFPrincipal extends javax.swing.JFrame {
         if (cpf != null) {
             if (!cpf.isEmpty()) {
                 persistir(null, cpf, CLIENTE);
-                atualizarTabela(CLIENTE);
+                atualizarTabela();
             }
         }
     }//GEN-LAST:event_mnuIncluirClienteActionPerformed
@@ -345,7 +346,7 @@ public class JFPrincipal extends javax.swing.JFrame {
             if (!cpf.isEmpty()) {
                 if (CLIENTE.equals(obterTipo(cpf))) {
                     persistir(obter(cpf), cpf, CLIENTE);
-                    atualizarTabela(CLIENTE);
+                    atualizarTabela();
                 }
             }
         }
@@ -357,7 +358,7 @@ public class JFPrincipal extends javax.swing.JFrame {
             if (!cpf.isEmpty()) {
                 if (CLIENTE.equals(obterTipo(cpf))) {
                     remover(cpf);
-                    atualizarTabela(CLIENTE);
+                    atualizarTabela();
                 }
             }
         }
@@ -365,7 +366,7 @@ public class JFPrincipal extends javax.swing.JFrame {
 
     private void mnuArmazenarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuArmazenarClienteActionPerformed
 
-        atualizarTabela(CLIENTE);
+        atualizarTabela();
         try {
             ControleBancoDados.armazenarDados();
         } catch (IOException ex) {
@@ -380,7 +381,7 @@ public class JFPrincipal extends javax.swing.JFrame {
         } catch (IOException | ClassNotFoundException ex) {
             Logger.getLogger(JFPrincipal.class.getName()).log(Level.SEVERE, null, ex);
         }
-        atualizarTabela(CLIENTE); // estava faltando isso para recuperar a tabela.
+        atualizarTabela(); // estava faltando isso para recuperar a tabela.
     }//GEN-LAST:event_mnuRecuperarClienteActionPerformed
 
     private void mnuSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuSairActionPerformed
@@ -400,7 +401,7 @@ public class JFPrincipal extends javax.swing.JFrame {
         if (cpf != null) {
             if (!cpf.isEmpty()) {
                 persistir(null, cpf, PRODUTO);
-                atualizarTabela(PRODUTO);
+                atualizarTabela();
             }
         }
     }//GEN-LAST:event_mnuIncluirProdutoActionPerformed
@@ -412,7 +413,7 @@ public class JFPrincipal extends javax.swing.JFrame {
             if (!cpf.isEmpty()) {
                 if (PRODUTO.equals(obterTipo(cpf))) {
                     persistir(obter(cpf), cpf, PRODUTO);
-                    atualizarTabela(PRODUTO);
+                    atualizarTabela();
                 }
             }
         }
@@ -427,7 +428,7 @@ public class JFPrincipal extends javax.swing.JFrame {
             if (!cpf.isEmpty()) {
                 if (PRODUTO.equals(obterTipo(cpf))) {
                     remover(cpf);
-                    atualizarTabela(PRODUTO);
+                    atualizarTabela();
                 }
             }
         }
@@ -435,13 +436,13 @@ public class JFPrincipal extends javax.swing.JFrame {
 
     private void mnuAtualizarProdutoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuAtualizarProdutoActionPerformed
         // TODO add your handling code here:
-        atualizarTabela(PRODUTO);
+        atualizarTabela();
     }//GEN-LAST:event_mnuAtualizarProdutoActionPerformed
 
     private void mnuArmazenarProdutosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuArmazenarProdutosActionPerformed
         // TODO add your handling code here:
 
-        atualizarTabela(PRODUTO);
+        atualizarTabela();
         try {
             ControleBancoDados.armazenarDados();
         } catch (IOException ex) {
@@ -456,7 +457,7 @@ public class JFPrincipal extends javax.swing.JFrame {
         } catch (IOException | ClassNotFoundException ex) {
             Logger.getLogger(JFPrincipal.class.getName()).log(Level.SEVERE, null, ex);
         }
-        atualizarTabela(PRODUTO);
+        atualizarTabela();
     }//GEN-LAST:event_mnuRecuperarProdutosActionPerformed
 
     private void btmSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btmSairActionPerformed

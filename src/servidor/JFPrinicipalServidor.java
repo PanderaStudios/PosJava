@@ -8,10 +8,14 @@ package servidor;
 import controle.ControleBancoDados;
 import java.io.IOException;
 import java.net.ServerSocket;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+import modelo.BancoDados;
 
 /**
  *
@@ -45,6 +49,10 @@ public class JFPrinicipalServidor extends javax.swing.JFrame {
         }
     }
 
+      private void atualizarTabela() {
+   //    listaA.setModel(getDadosTabelaCPF());
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -58,8 +66,6 @@ public class JFPrinicipalServidor extends javax.swing.JFrame {
         jlbServerName = new javax.swing.JLabel();
         jcomboEscolhaServidor = new javax.swing.JComboBox();
         jlbClientes = new javax.swing.JLabel();
-        jscrolIpClientes = new javax.swing.JScrollPane();
-        jlistIPClientes = new javax.swing.JList();
         btmIniciarServico = new javax.swing.JButton();
         btmPararServico = new javax.swing.JButton();
         btmFechar = new javax.swing.JButton();
@@ -69,6 +75,8 @@ public class JFPrinicipalServidor extends javax.swing.JFrame {
         txtStatus = new javax.swing.JTextField();
         jlbNumClientes = new javax.swing.JLabel();
         txtNumClientes = new javax.swing.JTextField();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTableClientes = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Pandera Studios");
@@ -81,9 +89,6 @@ public class JFPrinicipalServidor extends javax.swing.JFrame {
         jcomboEscolhaServidor.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "unesa", "Pander 1", "Pander 2", " " }));
 
         jlbClientes.setText("IPs dos Clientes que ja se Conectaram");
-
-        jlistIPClientes.setModel(listaA  );
-        jscrolIpClientes.setViewportView(jlistIPClientes);
 
         btmIniciarServico.setText("INICIAR SERVIDOR");
         btmIniciarServico.addActionListener(new java.awt.event.ActionListener() {
@@ -119,41 +124,49 @@ public class JFPrinicipalServidor extends javax.swing.JFrame {
 
         txtNumClientes.setEditable(false);
 
+        jTableClientes.setModel(getDadosTabela());
+        jScrollPane1.setViewportView(jTableClientes);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(32, 32, 32)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jlbTitulo)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(jlbClientes)
-                        .addGroup(layout.createSequentialGroup()
-                            .addComponent(jlbServerName)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                            .addComponent(jcomboEscolhaServidor, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addComponent(jscrolIpClientes)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jlnVersao)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtVersaoApp, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(41, 41, 41))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(btmPararServico)
-                            .addComponent(btmIniciarServico)
-                            .addComponent(btmFechar))
-                        .addGap(19, 19, 19))
                     .addGroup(layout.createSequentialGroup()
+                        .addGap(32, 32, 32)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jlbTitulo)
+                            .addComponent(jlbClientes)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jlbServerName)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jcomboEscolhaServidor, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 248, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, 71, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(jlnVersao)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(txtVersaoApp, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(41, 41, 41))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(btmFechar)
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btmPararServico, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(btmIniciarServico, javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jlbStatus)
                             .addComponent(txtStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jlbNumClientes)
                             .addComponent(txtNumClientes, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addContainerGap())))
+                        .addGap(0, 0, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -163,17 +176,9 @@ public class JFPrinicipalServidor extends javax.swing.JFrame {
                     .addComponent(jlbTitulo)
                     .addComponent(jlnVersao)
                     .addComponent(txtVersaoApp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jlbServerName)
-                            .addComponent(jcomboEscolhaServidor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(28, 28, 28)
-                        .addComponent(jlbClientes)
-                        .addGap(15, 15, 15)
-                        .addComponent(jscrolIpClientes, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
                         .addComponent(btmIniciarServico)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(btmPararServico)
@@ -184,10 +189,20 @@ public class JFPrinicipalServidor extends javax.swing.JFrame {
                         .addGap(19, 19, 19)
                         .addComponent(jlbNumClientes)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtNumClientes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 33, Short.MAX_VALUE)
-                .addComponent(btmFechar)
-                .addGap(19, 19, 19))
+                        .addComponent(txtNumClientes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btmFechar)
+                        .addGap(19, 19, 19))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jlbServerName)
+                            .addComponent(jcomboEscolhaServidor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(28, 28, 28)
+                        .addComponent(jlbClientes)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(39, 39, 39))))
         );
 
         pack();
@@ -225,9 +240,14 @@ public class JFPrinicipalServidor extends javax.swing.JFrame {
                 new ThCliente(s2.accept()).start();
 
                 numClientes++;
-                listaA.insertElementAt(numClientes + " - IP: " + s2.getInetAddress(), 0);
+                listaA.insertElementAt("" + s2.getInetAddress(), 0);
+                listaA.insertElementAt("" + s2.getLocalPort(), 1);
+                
+                jTableClientes.setModel(getDadosTabela());
+                
                 txtNumClientes.setText("" + numClientes);
 
+                
                 JOptionPane.showMessageDialog(null,
                         "Cliente:" + s2.getInetAddress() + "Esta Conectado a Porta: " + s2.getLocalPort(),
                         "Cliente Conectado", JOptionPane.INFORMATION_MESSAGE);
@@ -244,6 +264,21 @@ public class JFPrinicipalServidor extends javax.swing.JFrame {
 
     }//GEN-LAST:event_btmIniciarServicoActionPerformed
 
+        protected TableModel getDadosTabela() {
+//           DefaultListModel<String> lista = listaA;
+        String[] titulos
+                = {"IP", "Porta"}; 
+
+        Object[][] valores = new Object[listaA.size()][2];
+        for (int i=0; i< listaA.size(); i+=2) {
+                valores[i][0] = listaA.getElementAt(i);
+                valores[i][1] = listaA.getElementAt(i+1);
+            }
+        
+        return new DefaultTableModel(valores, titulos);
+    }
+
+    
     private void btmFecharActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btmFecharActionPerformed
         // TODO add your handling code here:
         try {
@@ -305,15 +340,15 @@ public class JFPrinicipalServidor extends javax.swing.JFrame {
     private javax.swing.JButton btmFechar;
     private javax.swing.JButton btmIniciarServico;
     private javax.swing.JButton btmPararServico;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTable jTableClientes;
     private javax.swing.JComboBox jcomboEscolhaServidor;
     private javax.swing.JLabel jlbClientes;
     private javax.swing.JLabel jlbNumClientes;
     private javax.swing.JLabel jlbServerName;
     private javax.swing.JLabel jlbStatus;
     private javax.swing.JLabel jlbTitulo;
-    private javax.swing.JList jlistIPClientes;
     private javax.swing.JLabel jlnVersao;
-    private javax.swing.JScrollPane jscrolIpClientes;
     private javax.swing.JTextField txtNumClientes;
     private javax.swing.JTextField txtStatus;
     private javax.swing.JTextField txtVersaoApp;
