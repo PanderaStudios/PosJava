@@ -30,23 +30,22 @@ public class JFPrincipal extends javax.swing.JFrame {
 
     public final String CLIENTE = "C";
     public final String PRODUTO = "P";
-    
-    
+
     protected TableModel getDadosTabela(String tipo) {
         int contador = 0;
         ArrayList<BancoDados> lista = obterTodos();
         String[] titulos
                 = {"CPF", "Nome", "Endereco", "Telefone"}; //"Tipo", 
-    
+
         Object[][] valores = new Object[lista.size()][4];
-        for (int i = 0; i < lista.size(); i++) {
-            if (tipo.equals(lista.get(i).getTipo())) {
+        for (BancoDados lista1 : lista) {
+            if (tipo.equals(lista1.getTipo())) {
 //                valores[i][0] = lista.get(i).getTipo();
-                valores[contador][0] = lista.get(i).getCpf();
-                valores[contador][1] = lista.get(i).getNome();
-                valores[contador][2] = lista.get(i).getEnder_Quant();
-                valores[contador][3] = lista.get(i).getTelef_Valor();
-                contador++; 
+                valores[contador][0] = lista1.getCpf();
+                valores[contador][1] = lista1.getNome();
+                valores[contador][2] = lista1.getEnder_Quant();
+                valores[contador][3] = lista1.getTelef_Valor();
+                contador++;
             }
         }
         return new DefaultTableModel(valores, titulos);
@@ -57,21 +56,17 @@ public class JFPrincipal extends javax.swing.JFrame {
         String[] titulos = {"CPF"};
         Object[][] valores = new Object[lista.size()][1];
         for (int i = 0; i < lista.size(); i++) {
-            if (lista.get(i).getTipo() == CLIENTE) {
+            if (lista.get(i).getTipo().equals(CLIENTE)) {
                 valores[i][0] = lista.get(i).getCpf();
             }
         }
         return new DefaultTableModel(valores, titulos);
     }
 
-
     private void atualizarTabela(String tipo) {
         jTableCliente.setModel(getDadosTabela(tipo));
     }
 
-//    private void atualizarTabelaProduto() {
-//        jTableProduto.setModel(getDadosTabelaProduto());
-//    }
     protected void persistir(BancoDados c, String cpf, String tipo) {
         JDDados dados = new JDDados(this, true);
         dados.setDados(c, cpf, tipo);
@@ -82,23 +77,10 @@ public class JFPrincipal extends javax.swing.JFrame {
         }
     }
 
-    /*    protected void persistirProduto(Produto p, String cod) {
-     JDDadosProduto dados = new JDDadosProduto(this, true);
-     dados.setDados(p, cod);
-     dados.setVisible(true);
-     // Modal -> Fica parado aqui até a janela "sumir"
-     if (dados.sucesso) {
-     pProduto.persistirProduto(dados.getDados());
-     }
-     }
-     */
     protected void remover(String cpf) {
         cCliente.remover(cpf);
     }
 
-//    protected void removerProduto(String cpf) {
-//        pProduto.removerProduto(cpf);
-//    }
     protected BancoDados obter(String cpf) {
         return cCliente.obter(cpf);
     }
@@ -106,12 +88,8 @@ public class JFPrincipal extends javax.swing.JFrame {
     protected String obterTipo(String cpf) {
         return cCliente.obter(cpf).getTipo();
     }
-//    protected Produto obterProduto(String cpf) {
-//        return pProduto.obterProduto(cpf);
-//    }
 
     protected void preActions() {
-//     cpf = ""; // recebera codigo digitado
 
     }
 
@@ -263,6 +241,7 @@ public class JFPrincipal extends javax.swing.JFrame {
         jMenu2.setText("Outros");
 
         mnuArmazenarCliente.setText("Armazenar Dados Clientes");
+        mnuArmazenarCliente.setEnabled(false);
         mnuArmazenarCliente.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 mnuArmazenarClienteActionPerformed(evt);
@@ -279,6 +258,7 @@ public class JFPrincipal extends javax.swing.JFrame {
         jMenu2.add(mnuRecuperarCliente);
 
         mnuArmazenarProdutos.setText("Armazenar Dados Produtos");
+        mnuArmazenarProdutos.setEnabled(false);
         mnuArmazenarProdutos.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 mnuArmazenarProdutosActionPerformed(evt);
@@ -411,6 +391,7 @@ public class JFPrincipal extends javax.swing.JFrame {
         System.exit(0);
 
     }//GEN-LAST:event_mnuSairActionPerformed
+                                      
 
     private void mnuIncluirProdutoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuIncluirProdutoActionPerformed
         // TODO add your handling code here:
@@ -490,7 +471,7 @@ public class JFPrincipal extends javax.swing.JFrame {
         // TODO add your handling code here:
         String cpf = "";
         boolean isCadastro = false;
-        
+
         ArrayList<BancoDados> cpfCod = (obterTodos());
 
         // loop enquanto teclar vazio ou not fim 
@@ -504,7 +485,7 @@ public class JFPrincipal extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, "Por Favor, Digite Algo!", "Msg do Servidor",
                         JOptionPane.INFORMATION_MESSAGE);
             } else {
-                
+
                 for (BancoDados cpfCod1 : cpfCod) {
                     if (cpf.equals(cpfCod1.getCpf())) {
                         if (isIncluir) {
@@ -539,11 +520,11 @@ public class JFPrincipal extends javax.swing.JFrame {
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-       
+
         //</editor-fold>
 
         /* Create and display the form */
-         java.awt.EventQueue.invokeLater(new Runnable() {
+        java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new JFPrincipal().setVisible(true);
             }

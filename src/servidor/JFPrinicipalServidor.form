@@ -112,6 +112,7 @@
   <SubComponents>
     <Component class="javax.swing.JTextField" name="txtVersaoApp">
       <Properties>
+        <Property name="editable" type="boolean" value="false"/>
         <Property name="text" type="java.lang.String" value="v_1.0"/>
       </Properties>
     </Component>
@@ -196,6 +197,9 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="txtStatus">
+      <Properties>
+        <Property name="editable" type="boolean" value="false"/>
+      </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="jlbNumClientes">
       <Properties>
@@ -203,6 +207,9 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="txtNumClientes">
+      <Properties>
+        <Property name="editable" type="boolean" value="false"/>
+      </Properties>
     </Component>
   </SubComponents>
 </Form>

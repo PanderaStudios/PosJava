@@ -37,7 +37,7 @@ public class JFPrinicipalServidor extends javax.swing.JFrame {
 
     private void preActions() {
         numClientes = 0;
-        listaA = new DefaultListModel<String>();
+        listaA = new DefaultListModel<>();
         try {
             s0 = new ServerSocket(5050);
         } catch (IOException ex) {
@@ -73,6 +73,7 @@ public class JFPrinicipalServidor extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Pandera Studios");
 
+        txtVersaoApp.setEditable(false);
         txtVersaoApp.setText("v_1.0");
 
         jlbServerName.setText("Server Name: ");
@@ -112,7 +113,11 @@ public class JFPrinicipalServidor extends javax.swing.JFrame {
 
         jlnVersao.setText("Versão");
 
+        txtStatus.setEditable(false);
+
         jlbNumClientes.setText("NUM. CLIENTES:");
+
+        txtNumClientes.setEditable(false);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -198,16 +203,13 @@ public class JFPrinicipalServidor extends javax.swing.JFrame {
             System.out.println("Cheguei Aqui 2.1");
 
             try {
+                // TENTA LER O ARQUIVO BANCO_DADOS.BIN !!! AQUI PRECISA DE ROTINA DE TRATAMENTO DE ARQUIVO
                 ControleBancoDados.carregarDados();
                 txtStatus.setText("ONLINE");
             } catch (ClassNotFoundException ex) {
                 txtStatus.setText("OFFLINE");
                 Logger.getLogger(JFPrinicipalServidor.class.getName()).log(Level.SEVERE, null, ex);
-            } finally {
-                System.out.println("Deseja Criar o Arquivo?");
             }
-
-            System.out.println("Cheguei Aqui 2.2");
 
             JOptionPane.showMessageDialog(null, "Servidor Correndo", "Servidor",
                     JOptionPane.INFORMATION_MESSAGE);
@@ -215,11 +217,11 @@ public class JFPrinicipalServidor extends javax.swing.JFrame {
             btmIniciarServico.setEnabled(false);
             btmPararServico.setEnabled(true);
             btmFechar.setEnabled(true);
-            
+
             while (true) {
-                
+
                 ServerSocket s2 = s0;
-                
+
                 new ThCliente(s2.accept()).start();
 
                 numClientes++;
@@ -230,7 +232,8 @@ public class JFPrinicipalServidor extends javax.swing.JFrame {
                         "Cliente:" + s2.getInetAddress() + "Esta Conectado a Porta: " + s2.getLocalPort(),
                         "Cliente Conectado", JOptionPane.INFORMATION_MESSAGE);
 
-//                JOptionPane.getFrameForComponent(this).repaint();
+// fazer esse repaint sem precisar da optioPane acima
+//                JOptionPane.getDesktopPaneForComponent(this).repaint();
                 System.out.println("ip>" + s2.getInetAddress());
 
             }
@@ -244,9 +247,7 @@ public class JFPrinicipalServidor extends javax.swing.JFrame {
     private void btmFecharActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btmFecharActionPerformed
         // TODO add your handling code here:
         try {
-            // TODO add your handling code here:
             s0.close();
-
         } catch (IOException ex) {
             Logger.getLogger(JFPrinicipalServidor.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
@@ -295,10 +296,8 @@ public class JFPrinicipalServidor extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new JFPrinicipalServidor().setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            new JFPrinicipalServidor().setVisible(true);
         });
     }
 

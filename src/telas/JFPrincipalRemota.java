@@ -10,7 +10,7 @@ public class JFPrincipalRemota extends JFPrincipal {
 
     ControleComunicacao c2;
 
-//    @Override
+    @Override
     protected void remover(String cpf) {
         try {
             c2.enviarTexto("R");
@@ -19,7 +19,7 @@ public class JFPrincipalRemota extends JFPrincipal {
         }
     }
 
-//    @Override
+    @Override
     protected void persistir(BancoDados c, String cpf, String tipo) {
         JDDados dados = new JDDados(this, true);
         dados.setDados(c, cpf, tipo);
@@ -35,6 +35,7 @@ public class JFPrincipalRemota extends JFPrincipal {
     }
 
   
+    @Override
     protected BancoDados obter(String cpf) {
         try {
             c2.enviarTexto("O");
@@ -52,7 +53,7 @@ public class JFPrincipalRemota extends JFPrincipal {
             c2.enviarTexto("T");
             return (ArrayList<BancoDados>) c2.receberObjeto();
         } catch (IOException | ClassNotFoundException ex) {
-            return new ArrayList<BancoDados>();
+            return new ArrayList<>();
         }
     }
 
@@ -68,10 +69,8 @@ public class JFPrincipalRemota extends JFPrincipal {
     public static void main(String args[]) {
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new JFPrincipalRemota().setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            new JFPrincipalRemota().setVisible(true);
         });
     }
 
