@@ -198,11 +198,11 @@ public class JFPrinicipalServidor extends javax.swing.JFrame {
             System.out.println("Cheguei Aqui 2.1");
 
             try {
-//                ControleBancoDados.carregarDados();
+                ControleBancoDados.carregarDados();
                 txtStatus.setText("ONLINE");
-//            } catch (ClassNotFoundException ex) {
-//                txtStatus.setText("OFFLINE");
-//                Logger.getLogger(JFPrinicipalServidor.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ClassNotFoundException ex) {
+                txtStatus.setText("OFFLINE");
+                Logger.getLogger(JFPrinicipalServidor.class.getName()).log(Level.SEVERE, null, ex);
             } finally {
                 System.out.println("Deseja Criar o Arquivo?");
             }
@@ -217,18 +217,21 @@ public class JFPrinicipalServidor extends javax.swing.JFrame {
             btmFechar.setEnabled(true);
             
             while (true) {
-                new ThCliente(s0.accept()).start();
+                
+                ServerSocket s2 = s0;
+                
+                new ThCliente(s2.accept()).start();
 
                 numClientes++;
-                listaA.insertElementAt(numClientes + " - IP: " + s0.getInetAddress(), 0);
+                listaA.insertElementAt(numClientes + " - IP: " + s2.getInetAddress(), 0);
                 txtNumClientes.setText("" + numClientes);
 
                 JOptionPane.showMessageDialog(null,
-                        "Cliente:" + s0.getInetAddress() + "Esta Conectado a Porta: " + s0.getLocalPort(),
+                        "Cliente:" + s2.getInetAddress() + "Esta Conectado a Porta: " + s2.getLocalPort(),
                         "Cliente Conectado", JOptionPane.INFORMATION_MESSAGE);
 
 //                JOptionPane.getFrameForComponent(this).repaint();
-                System.out.println("ip>" + s0.getInetAddress());
+                System.out.println("ip>" + s2.getInetAddress());
 
             }
         } catch (IOException ex) {

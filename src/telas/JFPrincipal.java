@@ -28,40 +28,27 @@ public class JFPrincipal extends javax.swing.JFrame {
         return cCliente.obterTodos();
     }
 
-    //protected ArrayList<BancoDados> obterTodosP() {
-    //    return cCliente.obterTodosP();
-    //}
-
-    protected TableModel getDadosTabela() {
-//        int contador = 0;
+    public final String CLIENTE = "C";
+    public final String PRODUTO = "P";
+    
+    
+    protected TableModel getDadosTabela(String tipo) {
+        int contador = 0;
         ArrayList<BancoDados> lista = obterTodos();
         String[] titulos
-                = {"CPF", "Tipo", "Nome", "Endereco", "Telefone"};
+                = {"CPF", "Nome", "Endereco", "Telefone"}; //"Tipo", 
     
-        Object[][] valores = new Object[lista.size()][5];
+        Object[][] valores = new Object[lista.size()][4];
         for (int i = 0; i < lista.size(); i++) {
-            valores[i][0] = lista.get(i).getCpf();
-            valores[i][1] = lista.get(i).getTipo();
-            valores[i][2] = lista.get(i).getNome();
-            valores[i][3] = lista.get(i).getEnder_Quant();
-            valores[i][4] = lista.get(i).getTelef_Valor();
-//            if ("C".equals(lista.get(i).getTipo())) {
-//                contador++;
-//            }
-        }
-
-/*        Object[][] valores = new Object[contador][5];
-        int contador2 = 0;
-        for (BancoDados lista1 : lista) {
-            if ("C".equals(lista1.getTipo())) {
-                valores[contador2][0] = lista1.getCpf();
-                valores[contador2][1] = lista1.getTipo();
-                valores[contador2][2] = lista1.getNome();
-                valores[contador2][3] = lista1.getEnder_Quant();
-                valores[contador2][4] = lista1.getTelef_Valor();
+            if (tipo.equals(lista.get(i).getTipo())) {
+//                valores[i][0] = lista.get(i).getTipo();
+                valores[contador][0] = lista.get(i).getCpf();
+                valores[contador][1] = lista.get(i).getNome();
+                valores[contador][2] = lista.get(i).getEnder_Quant();
+                valores[contador][3] = lista.get(i).getTelef_Valor();
+                contador++; 
             }
         }
-  */
         return new DefaultTableModel(valores, titulos);
     }
 
@@ -70,35 +57,16 @@ public class JFPrincipal extends javax.swing.JFrame {
         String[] titulos = {"CPF"};
         Object[][] valores = new Object[lista.size()][1];
         for (int i = 0; i < lista.size(); i++) {
-            if (lista.get(i).getTipo() == "C") {
+            if (lista.get(i).getTipo() == CLIENTE) {
                 valores[i][0] = lista.get(i).getCpf();
             }
         }
         return new DefaultTableModel(valores, titulos);
     }
 
-    protected TableModel getDadosTabelaProduto() {
-//        int contador = 0;
-        ArrayList<BancoDados> lista = obterTodos();
-        String[] titulos
-                = {"CPF", "Tipo", "Nome", "Quant", "Valor"};
-        Object[][] valores = new Object[lista.size()][5];
-        for (int i = 0; i < lista.size(); i++) {
-//            if (lista.get(i).getTipo() == "P") 
-            {
-                valores[i][0] = lista.get(i).getCpf();
-                valores[i][1] = lista.get(i).getTipo();
-                valores[i][2] = lista.get(i).getNome();
-                valores[i][3] = lista.get(i).getEnder_Quant();
-                valores[i][4] = lista.get(i).getTelef_Valor();
-//                contador++;
-            }
-        }
-        return new DefaultTableModel(valores, titulos);
-    }
 
-    private void atualizarTabela() {
-        jTableCliente.setModel(getDadosTabela());
+    private void atualizarTabela(String tipo) {
+        jTableCliente.setModel(getDadosTabela(tipo));
     }
 
 //    private void atualizarTabelaProduto() {
@@ -195,10 +163,10 @@ public class JFPrincipal extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Pandera Studios Cliente");
 
-        jTableCliente.setModel(getDadosTabela());
+        jTableCliente.setModel(getDadosTabela("C"));
         jScrollPane1.setViewportView(jTableCliente);
 
-        jTableProduto.setModel(getDadosTabelaProduto());
+        jTableProduto.setModel(getDadosTabela("P"));
         jScrollPane2.setViewportView(jTableProduto);
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
@@ -378,15 +346,15 @@ public class JFPrincipal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void mnuAtualizarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuAtualizarClienteActionPerformed
-        atualizarTabela();
+        atualizarTabela(CLIENTE);
     }//GEN-LAST:event_mnuAtualizarClienteActionPerformed
 
     private void mnuIncluirClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuIncluirClienteActionPerformed
         String cpf = entraCPF(true); // recebera codigo digitado
         if (cpf != null) {
             if (!cpf.isEmpty()) {
-                persistir(null, cpf, "C");
-                atualizarTabela();
+                persistir(null, cpf, CLIENTE);
+                atualizarTabela(CLIENTE);
             }
         }
     }//GEN-LAST:event_mnuIncluirClienteActionPerformed
@@ -395,9 +363,9 @@ public class JFPrincipal extends javax.swing.JFrame {
         String cpf = entraCPF(false); // recebera codigo digitado
         if (cpf != null) {
             if (!cpf.isEmpty()) {
-                if ("C".equals(obterTipo(cpf))) {
-                    persistir(obter(cpf), cpf, "C");
-                    atualizarTabela();
+                if (CLIENTE.equals(obterTipo(cpf))) {
+                    persistir(obter(cpf), cpf, CLIENTE);
+                    atualizarTabela(CLIENTE);
                 }
             }
         }
@@ -407,9 +375,9 @@ public class JFPrincipal extends javax.swing.JFrame {
         String cpf = entraCPF(false); // recebera codigo digitado
         if (cpf != null) {
             if (!cpf.isEmpty()) {
-                if ("C".equals(obterTipo(cpf))) {
+                if (CLIENTE.equals(obterTipo(cpf))) {
                     remover(cpf);
-                    atualizarTabela();
+                    atualizarTabela(CLIENTE);
                 }
             }
         }
@@ -417,7 +385,7 @@ public class JFPrincipal extends javax.swing.JFrame {
 
     private void mnuArmazenarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuArmazenarClienteActionPerformed
 
-        atualizarTabela();
+        atualizarTabela(CLIENTE);
         try {
             ControleBancoDados.armazenarDados();
         } catch (IOException ex) {
@@ -432,7 +400,7 @@ public class JFPrincipal extends javax.swing.JFrame {
         } catch (IOException | ClassNotFoundException ex) {
             Logger.getLogger(JFPrincipal.class.getName()).log(Level.SEVERE, null, ex);
         }
-        atualizarTabela(); // estava faltando isso para recuperar a tabela.
+        atualizarTabela(CLIENTE); // estava faltando isso para recuperar a tabela.
     }//GEN-LAST:event_mnuRecuperarClienteActionPerformed
 
     private void mnuSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuSairActionPerformed
@@ -450,8 +418,8 @@ public class JFPrincipal extends javax.swing.JFrame {
         String cpf = entraCPF(false); // recebera codigo digitado
         if (cpf != null) {
             if (!cpf.isEmpty()) {
-                persistir(null, cpf, "P");
-                atualizarTabela();
+                persistir(null, cpf, PRODUTO);
+                atualizarTabela(PRODUTO);
             }
         }
     }//GEN-LAST:event_mnuIncluirProdutoActionPerformed
@@ -461,9 +429,9 @@ public class JFPrincipal extends javax.swing.JFrame {
         String cpf = entraCPF(false); // recebera codigo digitado
         if (cpf != null) {
             if (!cpf.isEmpty()) {
-                if ("P".equals(obterTipo(cpf))) {
-                    persistir(obter(cpf), cpf, "P");
-                    atualizarTabela();
+                if (PRODUTO.equals(obterTipo(cpf))) {
+                    persistir(obter(cpf), cpf, PRODUTO);
+                    atualizarTabela(PRODUTO);
                 }
             }
         }
@@ -476,9 +444,9 @@ public class JFPrincipal extends javax.swing.JFrame {
         String cpf = entraCPF(false); // recebera codigo digitado
         if (cpf != null) {
             if (!cpf.isEmpty()) {
-                if ("P".equals(obterTipo(cpf))) {
+                if (PRODUTO.equals(obterTipo(cpf))) {
                     remover(cpf);
-                    atualizarTabela();
+                    atualizarTabela(PRODUTO);
                 }
             }
         }
@@ -486,13 +454,13 @@ public class JFPrincipal extends javax.swing.JFrame {
 
     private void mnuAtualizarProdutoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuAtualizarProdutoActionPerformed
         // TODO add your handling code here:
-        atualizarTabela();
+        atualizarTabela(PRODUTO);
     }//GEN-LAST:event_mnuAtualizarProdutoActionPerformed
 
     private void mnuArmazenarProdutosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuArmazenarProdutosActionPerformed
         // TODO add your handling code here:
 
-        atualizarTabela();
+        atualizarTabela(PRODUTO);
         try {
             ControleBancoDados.armazenarDados();
         } catch (IOException ex) {
@@ -507,7 +475,7 @@ public class JFPrincipal extends javax.swing.JFrame {
         } catch (IOException | ClassNotFoundException ex) {
             Logger.getLogger(JFPrincipal.class.getName()).log(Level.SEVERE, null, ex);
         }
-        atualizarTabela();
+        atualizarTabela(PRODUTO);
     }//GEN-LAST:event_mnuRecuperarProdutosActionPerformed
 
     private void btmSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btmSairActionPerformed
