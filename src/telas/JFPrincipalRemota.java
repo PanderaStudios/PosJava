@@ -60,7 +60,7 @@ public class JFPrincipalRemota extends JFPrincipal {
     @Override
     protected void preActions() {
         try {
-            Socket s2 = new Socket("127.0.0.1", 5050);
+            Socket s2 = new Socket("localhost", 5050);
             c2 = new ControleComunicacao(s2);
         } catch (Exception ex) {
         }

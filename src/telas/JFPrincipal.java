@@ -21,8 +21,7 @@ import modelo.BancoDados;
  */
 public class JFPrincipal extends javax.swing.JFrame {
 
-    protected ControleBancoDados dDados
-            = new ControleBancoDados();
+    protected ControleBancoDados dDados = new ControleBancoDados();
 
     protected ArrayList<BancoDados> obterTodos() {
         return dDados.obterTodos();
@@ -33,22 +32,33 @@ public class JFPrincipal extends javax.swing.JFrame {
 
     protected TableModel getDadosTabela(String tipo) {
         int contador = 0;
-        ArrayList<BancoDados> lista = obterTodos();
         String[] titulos
-                = {"CPF", "Nome", "Endereco", "Telefone"}; //"Tipo", 
+                = {"CPF", "Nome",
+                    ((tipo.equals(CLIENTE)) ? "Endereco" : "Quantidade"),
+                    ((tipo.equals(CLIENTE)) ? "Telefone" : "Valor")};
 
-        Object[][] valores = new Object[lista.size()][4];
-        for (BancoDados lista1 : lista) {
-            if (tipo.equals(lista1.getTipo())) {
+        try {
+            System.out.println("teste 3");
+            ArrayList<BancoDados> lista = obterTodos();
+            Object[][] valores = new Object[lista.size()][4];
+            for (BancoDados lista1 : lista) {
+                if (tipo.equals(lista1.getTipo())) {
 //                valores[i][0] = lista.get(i).getTipo();
-                valores[contador][0] = lista1.getCpf();
-                valores[contador][1] = lista1.getNome();
-                valores[contador][2] = lista1.getEnder_Quant();
-                valores[contador][3] = lista1.getTelef_Valor();
-                contador++;
+                    valores[contador][0] = lista1.getCpf();
+                    valores[contador][1] = lista1.getNome();
+                    valores[contador][2] = lista1.getEnder_Quant();
+                    valores[contador][3] = lista1.getTelef_Valor();
+                    contador++;
+                }
             }
+            return new DefaultTableModel(valores, titulos);
+
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "Servidor OFF LINE!!!", "Cliente",
+                    JOptionPane.INFORMATION_MESSAGE);
         }
-        return new DefaultTableModel(valores, titulos);
+
+        return new DefaultTableModel(null, titulos);
     }
 
     protected TableModel getDadosTabelaCPF() {
@@ -91,6 +101,8 @@ public class JFPrincipal extends javax.swing.JFrame {
     }
 
     protected void preActions() {
+        System.out.println("teste 1");
+//        dDados = new ControleBancoDados();
 
     }
 
@@ -119,7 +131,14 @@ public class JFPrincipal extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         btmSair = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
-        jMenu1 = new javax.swing.JMenu();
+        jMenuConectar = new javax.swing.JMenu();
+        mnuConectar = new javax.swing.JMenuItem();
+        mnuDesconectar = new javax.swing.JMenuItem();
+        mnuRecuperarCliente = new javax.swing.JMenuItem();
+        mnuRecuperarProdutos = new javax.swing.JMenuItem();
+        jSeparator2 = new javax.swing.JPopupMenu.Separator();
+        mnuSair = new javax.swing.JMenuItem();
+        jMenuClientes = new javax.swing.JMenu();
         mnuIncluirCliente = new javax.swing.JMenuItem();
         mnuAlterarCliente = new javax.swing.JMenuItem();
         mnuExcluirCliente = new javax.swing.JMenuItem();
@@ -131,13 +150,6 @@ public class JFPrincipal extends javax.swing.JFrame {
         mnuExcluirProduto = new javax.swing.JMenuItem();
         jSeparator3 = new javax.swing.JPopupMenu.Separator();
         mnuAtualizarProduto = new javax.swing.JMenuItem();
-        jMenu2 = new javax.swing.JMenu();
-        mnuArmazenarCliente = new javax.swing.JMenuItem();
-        mnuRecuperarCliente = new javax.swing.JMenuItem();
-        mnuArmazenarProdutos = new javax.swing.JMenuItem();
-        mnuRecuperarProdutos = new javax.swing.JMenuItem();
-        jSeparator2 = new javax.swing.JPopupMenu.Separator();
-        mnuSair = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Pandera Studios Cliente");
@@ -161,7 +173,57 @@ public class JFPrincipal extends javax.swing.JFrame {
             }
         });
 
-        jMenu1.setText("Clientes");
+        jMenuConectar.setText("Conectar");
+
+        mnuConectar.setText("Conectar no Servidor");
+        mnuConectar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuConectarActionPerformed(evt);
+            }
+        });
+        jMenuConectar.add(mnuConectar);
+
+        mnuDesconectar.setText("Desconectar do Servidor");
+        mnuDesconectar.setEnabled(false);
+        mnuDesconectar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuDesconectarActionPerformed(evt);
+            }
+        });
+        jMenuConectar.add(mnuDesconectar);
+
+        mnuRecuperarCliente.setText("Recuperar Dados Clientes");
+        mnuRecuperarCliente.setEnabled(false);
+        mnuRecuperarCliente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuRecuperarClienteActionPerformed(evt);
+            }
+        });
+        jMenuConectar.add(mnuRecuperarCliente);
+
+        mnuRecuperarProdutos.setText("Recuperar Dados Produtos");
+        mnuRecuperarProdutos.setEnabled(false);
+        mnuRecuperarProdutos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuRecuperarProdutosActionPerformed(evt);
+            }
+        });
+        jMenuConectar.add(mnuRecuperarProdutos);
+        jMenuConectar.add(jSeparator2);
+
+        mnuSair.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.ALT_MASK | java.awt.event.InputEvent.CTRL_MASK));
+        mnuSair.setText("Sair");
+        mnuSair.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuSairActionPerformed(evt);
+            }
+        });
+        jMenuConectar.add(mnuSair);
+
+        jMenuBar1.add(jMenuConectar);
+
+        jMenuClientes.setText("Clientes");
+        jMenuClientes.setEnabled(false);
 
         mnuIncluirCliente.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_I, java.awt.event.InputEvent.ALT_MASK));
         mnuIncluirCliente.setText("Incluir");
@@ -170,7 +232,7 @@ public class JFPrincipal extends javax.swing.JFrame {
                 mnuIncluirClienteActionPerformed(evt);
             }
         });
-        jMenu1.add(mnuIncluirCliente);
+        jMenuClientes.add(mnuIncluirCliente);
 
         mnuAlterarCliente.setText("Alterar");
         mnuAlterarCliente.addActionListener(new java.awt.event.ActionListener() {
@@ -178,7 +240,7 @@ public class JFPrincipal extends javax.swing.JFrame {
                 mnuAlterarClienteActionPerformed(evt);
             }
         });
-        jMenu1.add(mnuAlterarCliente);
+        jMenuClientes.add(mnuAlterarCliente);
 
         mnuExcluirCliente.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_E, java.awt.event.InputEvent.ALT_MASK));
         mnuExcluirCliente.setText("Excluir");
@@ -187,8 +249,8 @@ public class JFPrincipal extends javax.swing.JFrame {
                 mnuExcluirClienteActionPerformed(evt);
             }
         });
-        jMenu1.add(mnuExcluirCliente);
-        jMenu1.add(jSeparator1);
+        jMenuClientes.add(mnuExcluirCliente);
+        jMenuClientes.add(jSeparator1);
 
         mnuAtualizarCliente.setText("Atualizar Tela");
         mnuAtualizarCliente.addActionListener(new java.awt.event.ActionListener() {
@@ -196,11 +258,12 @@ public class JFPrincipal extends javax.swing.JFrame {
                 mnuAtualizarClienteActionPerformed(evt);
             }
         });
-        jMenu1.add(mnuAtualizarCliente);
+        jMenuClientes.add(mnuAtualizarCliente);
 
-        jMenuBar1.add(jMenu1);
+        jMenuBar1.add(jMenuClientes);
 
         jMenuProdutos.setText("Produtos");
+        jMenuProdutos.setEnabled(false);
 
         mnuIncluirProduto.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_I, java.awt.event.InputEvent.ALT_MASK));
         mnuIncluirProduto.setText("Incluir");
@@ -238,54 +301,6 @@ public class JFPrincipal extends javax.swing.JFrame {
         jMenuProdutos.add(mnuAtualizarProduto);
 
         jMenuBar1.add(jMenuProdutos);
-
-        jMenu2.setText("Outros");
-
-        mnuArmazenarCliente.setText("Armazenar Dados Clientes");
-        mnuArmazenarCliente.setEnabled(false);
-        mnuArmazenarCliente.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mnuArmazenarClienteActionPerformed(evt);
-            }
-        });
-        jMenu2.add(mnuArmazenarCliente);
-
-        mnuRecuperarCliente.setText("Recuperar Dados Clientes");
-        mnuRecuperarCliente.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mnuRecuperarClienteActionPerformed(evt);
-            }
-        });
-        jMenu2.add(mnuRecuperarCliente);
-
-        mnuArmazenarProdutos.setText("Armazenar Dados Produtos");
-        mnuArmazenarProdutos.setEnabled(false);
-        mnuArmazenarProdutos.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mnuArmazenarProdutosActionPerformed(evt);
-            }
-        });
-        jMenu2.add(mnuArmazenarProdutos);
-
-        mnuRecuperarProdutos.setText("Recuperar Dados Produtos");
-        mnuRecuperarProdutos.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mnuRecuperarProdutosActionPerformed(evt);
-            }
-        });
-        jMenu2.add(mnuRecuperarProdutos);
-        jMenu2.add(jSeparator2);
-
-        mnuSair.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.ALT_MASK | java.awt.event.InputEvent.CTRL_MASK));
-        mnuSair.setText("Sair");
-        mnuSair.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mnuSairActionPerformed(evt);
-            }
-        });
-        jMenu2.add(mnuSair);
-
-        jMenuBar1.add(jMenu2);
 
         setJMenuBar(jMenuBar1);
 
@@ -364,16 +379,6 @@ public class JFPrincipal extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_mnuExcluirClienteActionPerformed
 
-    private void mnuArmazenarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuArmazenarClienteActionPerformed
-
-        atualizarTabela();
-        try {
-            ControleBancoDados.armazenarDados();
-        } catch (IOException ex) {
-            Logger.getLogger(JFPrincipal.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }//GEN-LAST:event_mnuArmazenarClienteActionPerformed
-
     private void mnuRecuperarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuRecuperarClienteActionPerformed
 
         try {
@@ -387,12 +392,22 @@ public class JFPrincipal extends javax.swing.JFrame {
     private void mnuSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuSairActionPerformed
         // TODO add your handling code here:
 
-        jTableCliente.removeAll();
-        jTableProduto.removeAll();
-        System.exit(0);
+        sairPgm();
 
     }//GEN-LAST:event_mnuSairActionPerformed
-                                      
+
+    private void sairPgm() {
+        // TODO add your handling code here:
+        int sair = 0;
+        sair = JOptionPane.showConfirmDialog(null, "Confirma Sair do Programa?",
+                "Cliente", JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE);
+        if (sair == 0) {
+            jTableCliente.removeAll();
+            jTableProduto.removeAll();
+            System.exit(0);
+        }
+    }
+
 
     private void mnuIncluirProdutoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuIncluirProdutoActionPerformed
         // TODO add your handling code here:
@@ -439,17 +454,6 @@ public class JFPrincipal extends javax.swing.JFrame {
         atualizarTabela();
     }//GEN-LAST:event_mnuAtualizarProdutoActionPerformed
 
-    private void mnuArmazenarProdutosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuArmazenarProdutosActionPerformed
-        // TODO add your handling code here:
-
-        atualizarTabela();
-        try {
-            ControleBancoDados.armazenarDados();
-        } catch (IOException ex) {
-            Logger.getLogger(JFPrincipal.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }//GEN-LAST:event_mnuArmazenarProdutosActionPerformed
-
     private void mnuRecuperarProdutosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuRecuperarProdutosActionPerformed
         // TODO add your handling code here:
         try {
@@ -462,11 +466,28 @@ public class JFPrincipal extends javax.swing.JFrame {
 
     private void btmSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btmSairActionPerformed
         // TODO add your handling code here:
-        jTableCliente.removeAll();
-        jTableProduto.removeAll();
-        System.exit(0);
-
+        sairPgm();
     }//GEN-LAST:event_btmSairActionPerformed
+
+    private void mnuConectarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuConectarActionPerformed
+        // TODO add your handling code here:
+
+        mnuDesconectar.setEnabled(true);
+        mnuRecuperarCliente.setEnabled(true);
+        mnuRecuperarProdutos.setEnabled(true);
+        jMenuClientes.setEnabled(true);
+        jMenuProdutos.setEnabled(true);
+    }//GEN-LAST:event_mnuConectarActionPerformed
+
+    private void mnuDesconectarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuDesconectarActionPerformed
+        // TODO add your handling code here:
+
+        mnuDesconectar.setEnabled(false);
+        mnuRecuperarCliente.setEnabled(false);
+        mnuRecuperarProdutos.setEnabled(false);
+        jMenuClientes.setEnabled(false);
+        jMenuProdutos.setEnabled(false);
+    }//GEN-LAST:event_mnuDesconectarActionPerformed
 
     private String entraCPF(boolean isIncluir) {
         // TODO add your handling code here:
@@ -536,9 +557,9 @@ public class JFPrincipal extends javax.swing.JFrame {
     private javax.swing.JButton btmSair;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenu jMenuClientes;
+    private javax.swing.JMenu jMenuConectar;
     private javax.swing.JMenu jMenuProdutos;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
@@ -549,10 +570,10 @@ public class JFPrincipal extends javax.swing.JFrame {
     private javax.swing.JTable jTableProduto;
     private javax.swing.JMenuItem mnuAlterarCliente;
     private javax.swing.JMenuItem mnuAlterarProduto;
-    private javax.swing.JMenuItem mnuArmazenarCliente;
-    private javax.swing.JMenuItem mnuArmazenarProdutos;
     private javax.swing.JMenuItem mnuAtualizarCliente;
     private javax.swing.JMenuItem mnuAtualizarProduto;
+    private javax.swing.JMenuItem mnuConectar;
+    private javax.swing.JMenuItem mnuDesconectar;
     private javax.swing.JMenuItem mnuExcluirCliente;
     private javax.swing.JMenuItem mnuExcluirProduto;
     private javax.swing.JMenuItem mnuIncluirCliente;

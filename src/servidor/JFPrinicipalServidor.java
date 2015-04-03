@@ -49,8 +49,8 @@ public class JFPrinicipalServidor extends javax.swing.JFrame {
         }
     }
 
-      private void atualizarTabela() {
-   //    listaA.setModel(getDadosTabelaCPF());
+    private void atualizarTabela() {
+        //    listaA.setModel(getDadosTabelaCPF());
     }
 
     /**
@@ -223,11 +223,13 @@ public class JFPrinicipalServidor extends javax.swing.JFrame {
                 txtStatus.setText("ONLINE");
             } catch (ClassNotFoundException ex) {
                 txtStatus.setText("OFFLINE");
+                JOptionPane.showMessageDialog(null, "Não foi possível Ler o Arquivo .bin !!!",
+                        "Servidor", JOptionPane.INFORMATION_MESSAGE);
                 Logger.getLogger(JFPrinicipalServidor.class.getName()).log(Level.SEVERE, null, ex);
             }
 
-            JOptionPane.showMessageDialog(null, "Servidor Correndo", "Servidor",
-                    JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Servidor Correndo",
+                    "Servidor", JOptionPane.INFORMATION_MESSAGE);
 
             btmIniciarServico.setEnabled(false);
             btmPararServico.setEnabled(true);
@@ -242,12 +244,11 @@ public class JFPrinicipalServidor extends javax.swing.JFrame {
                 numClientes++;
                 listaA.insertElementAt("" + s2.getInetAddress(), 0);
                 listaA.insertElementAt("" + s2.getLocalPort(), 1);
-                
+
                 jTableClientes.setModel(getDadosTabela());
-                
+
                 txtNumClientes.setText("" + numClientes);
 
-                
                 JOptionPane.showMessageDialog(null,
                         "Cliente:" + s2.getInetAddress() + "Esta Conectado a Porta: " + s2.getLocalPort(),
                         "Cliente Conectado", JOptionPane.INFORMATION_MESSAGE);
@@ -264,21 +265,21 @@ public class JFPrinicipalServidor extends javax.swing.JFrame {
 
     }//GEN-LAST:event_btmIniciarServicoActionPerformed
 
-        protected TableModel getDadosTabela() {
+    protected TableModel getDadosTabela() {
 //           DefaultListModel<String> lista = listaA;
         String[] titulos
-                = {"IP", "Porta"}; 
+                = {"IP", "Porta"};
 
         Object[][] valores = new Object[listaA.size()][2];
-        for (int i=0; i< listaA.size(); i+=2) {
-                valores[i][0] = listaA.getElementAt(i);
-                valores[i][1] = listaA.getElementAt(i+1);
-            }
-        
+        for (int i = 0; i < listaA.size(); i += 2) {
+            valores[i][0] = listaA.getElementAt(i);
+            valores[i][1] = listaA.getElementAt(i + 1);
+        }
+
         return new DefaultTableModel(valores, titulos);
     }
 
-    
+
     private void btmFecharActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btmFecharActionPerformed
         // TODO add your handling code here:
         try {
@@ -328,6 +329,9 @@ public class JFPrinicipalServidor extends javax.swing.JFrame {
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(JFPrinicipalServidor.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
