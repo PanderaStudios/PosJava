@@ -5,17 +5,10 @@
  */
 package servidor;
 
-import controle.ControleBancoDados;
-import java.io.IOException;
-import java.net.ServerSocket;
-import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
-import modelo.BancoDados;
 
 /**
  *
@@ -26,8 +19,10 @@ public class JFPrinicipalServidor extends javax.swing.JFrame {
     private DefaultListModel<String> listaA;
 
     private int numClientes;
-    private ServerSocket s0;
 
+    ServidorPlay servico;
+
+//    private ServerSocket s0;
     /**
      * Creates new form JFPrinicipalServidor
      */
@@ -35,6 +30,8 @@ public class JFPrinicipalServidor extends javax.swing.JFrame {
         preActions();
         initComponents();
         txtStatus.setText("OFFLINE");
+        btmIniciarServico.setEnabled(true);
+        btmPararServico.setEnabled(false);
         btmFechar.setEnabled(true);
 
     }
@@ -42,11 +39,6 @@ public class JFPrinicipalServidor extends javax.swing.JFrame {
     private void preActions() {
         numClientes = 0;
         listaA = new DefaultListModel<>();
-        try {
-            s0 = new ServerSocket(5050);
-        } catch (IOException ex) {
-            Logger.getLogger(JFPrinicipalServidor.class.getName()).log(Level.SEVERE, null, ex);
-        }
     }
 
     private void atualizarTabela() {
@@ -210,59 +202,16 @@ public class JFPrinicipalServidor extends javax.swing.JFrame {
 
     private void btmIniciarServicoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btmIniciarServicoActionPerformed
         // TODO add your handling code here:        
-        if (listaA == null) {
-            preActions();
+
+        servico = new ServidorPlay();
+        btmIniciarServico.setEnabled(false);
+        btmPararServico.setEnabled(true);
+
+//        while (true) 
+        {
+
+            servico.start();
         }
-
-        try {
-            System.out.println("Cheguei Aqui 2.1");
-
-            try {
-                // TENTA LER O ARQUIVO BANCO_DADOS.BIN !!! AQUI PRECISA DE ROTINA DE TRATAMENTO DE ARQUIVO
-                ControleBancoDados.carregarDados();
-                txtStatus.setText("ONLINE");
-            } catch (ClassNotFoundException ex) {
-                txtStatus.setText("OFFLINE");
-                JOptionPane.showMessageDialog(null, "Não foi possível Ler o Arquivo .bin !!!",
-                        "Servidor", JOptionPane.INFORMATION_MESSAGE);
-                Logger.getLogger(JFPrinicipalServidor.class.getName()).log(Level.SEVERE, null, ex);
-            }
-
-            JOptionPane.showMessageDialog(null, "Servidor Correndo",
-                    "Servidor", JOptionPane.INFORMATION_MESSAGE);
-
-            btmIniciarServico.setEnabled(false);
-            btmPararServico.setEnabled(true);
-            btmFechar.setEnabled(true);
-
-            while (true) {
-
-                ServerSocket s2 = s0;
-
-                new ThCliente(s2.accept()).start();
-
-                numClientes++;
-                listaA.insertElementAt("" + s2.getInetAddress(), 0);
-                listaA.insertElementAt("" + s2.getLocalPort(), 1);
-
-                jTableClientes.setModel(getDadosTabela());
-
-                txtNumClientes.setText("" + numClientes);
-
-                JOptionPane.showMessageDialog(null,
-                        "Cliente:" + s2.getInetAddress() + "Esta Conectado a Porta: " + s2.getLocalPort(),
-                        "Cliente Conectado", JOptionPane.INFORMATION_MESSAGE);
-
-// fazer esse repaint sem precisar da optioPane acima
-//                JOptionPane.getDesktopPaneForComponent(this).repaint();
-                System.out.println("ip>" + s2.getInetAddress());
-
-            }
-        } catch (IOException ex) {
-            Logger.getLogger(JFPrinicipalServidor.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-
     }//GEN-LAST:event_btmIniciarServicoActionPerformed
 
     protected TableModel getDadosTabela() {
@@ -282,57 +231,41 @@ public class JFPrinicipalServidor extends javax.swing.JFrame {
 
     private void btmFecharActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btmFecharActionPerformed
         // TODO add your handling code here:
-        try {
-            s0.close();
-        } catch (IOException ex) {
-            Logger.getLogger(JFPrinicipalServidor.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            txtStatus.setText("OFFLINE");
-        }
-        listaA.clear();
-        System.exit(0);
+        fecharApp();
     }//GEN-LAST:event_btmFecharActionPerformed
 
     private void btmPararServicoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btmPararServicoActionPerformed
-        try {
-            // TODO add your handling code here:
-            s0.close();
-        } catch (IOException ex) {
-            Logger.getLogger(JFPrinicipalServidor.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        listaA.clear();
-        btmIniciarServico.setEnabled(true);
+        pararServ();
+
     }//GEN-LAST:event_btmPararServicoActionPerformed
+
+    private void fecharApp() {
+        // TODO add your handling code here:
+    
+        int fechar = JOptionPane.showConfirmDialog(null, "Confirma Sair do Servidor?",
+                "Servidor", JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE);
+        if (fechar == 0) {
+            System.exit(0);
+        }
+    }
+
+    private void pararServ() {
+        // TODO add your handling code here:
+        int parar = JOptionPane.showConfirmDialog(null, "Confirma Parar o Servidor?",
+                "Servidor", JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE);
+        if (parar == 0) {
+            
+            servico.pararServ();
+            listaA.clear();
+            btmIniciarServico.setEnabled(true);
+            btmPararServico.setEnabled(false);
+        }
+    }
 
     /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(JFPrinicipalServidor.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(JFPrinicipalServidor.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(JFPrinicipalServidor.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(JFPrinicipalServidor.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> {
