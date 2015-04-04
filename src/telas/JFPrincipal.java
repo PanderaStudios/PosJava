@@ -92,6 +92,8 @@ public class JFPrincipal extends javax.swing.JFrame {
         dDados.remover(cpf);
     }
 
+
+
     protected BancoDados obter(String cpf) {
         return dDados.obter(cpf);
     }

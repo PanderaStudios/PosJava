@@ -4,6 +4,8 @@ import comum.controle.ControleComunicacao;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import modelo.BancoDados;
 
 public class JFPrincipalRemota extends JFPrincipal {
@@ -17,6 +19,19 @@ public class JFPrincipalRemota extends JFPrincipal {
             c2.enviarTexto(cpf);
         } catch (IOException ex) {
         }
+    }
+
+    
+    protected void parar() {
+        String cpf = "";
+
+        try {
+            c2.enviarTexto("S");
+            c2.enviarTexto("192.168.1.222");
+        } catch (IOException ex) {
+            Logger.getLogger(JFPrincipalRemota.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
     }
 
     @Override
@@ -34,7 +49,6 @@ public class JFPrincipalRemota extends JFPrincipal {
         }
     }
 
-  
     @Override
     protected BancoDados obter(String cpf) {
         try {
@@ -45,7 +59,6 @@ public class JFPrincipalRemota extends JFPrincipal {
             return null;
         }
     }
-
 
     @Override
     protected ArrayList<BancoDados> obterTodos() {

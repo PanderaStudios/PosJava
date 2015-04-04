@@ -9,9 +9,11 @@ import modelo.BancoDados;
 public class ThCliente extends Thread {
 
     private Socket s;
+    String ipCliente;
 
-    public ThCliente(Socket s) {
+    public ThCliente(Socket s, String ipCliente) {
         this.s = s;
+        this.ipCliente = ipCliente;
     }
 
     @Override
@@ -41,6 +43,10 @@ public class ThCliente extends Thread {
 
                 if ("T".equals(comando)) {
                     c1.enviarObjeto(dDados.obterTodos());
+                }
+
+                if ("S".equals(comando)) {
+                    ipCliente = c1.receberTexto();
                 }
             }
         } catch (IOException | ClassNotFoundException ex) {
