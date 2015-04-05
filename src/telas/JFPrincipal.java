@@ -5,107 +5,112 @@
  */
 package telas;
 
-import controle.ControleBancoDados;
+import controle.ControleCliente;
+import controle.ControleProduto;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
-import modelo.BancoDados;
+import modelo.Cliente;
+import modelo.Produto;
 
 /**
  *
- * @author Grupo
+ * @author aluno
  */
 public class JFPrincipal extends javax.swing.JFrame {
 
-    protected ControleBancoDados dDados = new ControleBancoDados();
+    protected ControleCliente cCliente
+            = new ControleCliente();
 
-    protected ArrayList<BancoDados> obterTodos() {
-        return dDados.obterTodos();
+    protected ControleProduto pProduto
+            = new ControleProduto();
+
+    protected ArrayList<Cliente> obterTodos() {
+        return cCliente.obterTodos();
     }
 
-    public final String CLIENTE = "C";
-    public final String PRODUTO = "P";
+    protected ArrayList<Produto> obterTodosProdutos() {
+        return pProduto.obterTodos();
+    }
 
-    protected TableModel getDadosTabela(String tipo) {
-        int contador = 0;
+    protected TableModel getDadosTabela() {
+        ArrayList<Cliente> lista = obterTodos();
         String[] titulos
-                = {"CPF", "Nome",
-                    ((tipo.equals(CLIENTE)) ? "Endereco" : "Quantidade"),
-                    ((tipo.equals(CLIENTE)) ? "Telefone" : "Valor")};
-
-        try {
-            System.out.println("teste 3");
-            ArrayList<BancoDados> lista = obterTodos();
-            Object[][] valores = new Object[lista.size()][4];
-            for (BancoDados lista1 : lista) {
-                if (tipo.equals(lista1.getTipo())) {
-//                valores[i][0] = lista.get(i).getTipo();
-                    valores[contador][0] = lista1.getCpf();
-                    valores[contador][1] = lista1.getNome();
-                    valores[contador][2] = lista1.getEnder_Quant();
-                    valores[contador][3] = lista1.getTelef_Valor();
-                    contador++;
-                }
-            }
-            return new DefaultTableModel(valores, titulos);
-
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(null, "Servidor OFF LINE!!!", "Cliente",
-                    JOptionPane.INFORMATION_MESSAGE);
-        }
-
-        return new DefaultTableModel(null, titulos);
-    }
-
-    protected TableModel getDadosTabelaCPF() {
-        ArrayList<BancoDados> lista = obterTodos();
-        String[] titulos = {"CPF"};
-        Object[][] valores = new Object[lista.size()][1];
+                = {"CPF", "Nome", "Endereco", "Telefone"};
+        Object[][] valores = new Object[lista.size()][4];
         for (int i = 0; i < lista.size(); i++) {
-            if (lista.get(i).getTipo().equals(CLIENTE)) {
-                valores[i][0] = lista.get(i).getCpf();
-            }
+            valores[i][0] = lista.get(i).getCpf();
+            valores[i][1] = lista.get(i).getNome();
+            valores[i][2] = lista.get(i).getEndereco();
+            valores[i][3] = lista.get(i).getTelefone();
         }
         return new DefaultTableModel(valores, titulos);
     }
 
-    private void atualizarTabela() {
-        jTableCliente.setModel(getDadosTabela(CLIENTE));
-        jTableProduto.setModel(getDadosTabela(PRODUTO));
+    protected TableModel getDadosTabelaProduto() {
+        ArrayList<Produto> lista = obterTodosProdutos();
+        String[] titulos
+                = {"COD", "Nome", "Quantidade", "Valor"};
+        Object[][] valores = new Object[lista.size()][4];
+        for (int i = 0; i < lista.size(); i++) {
+            valores[i][0] = lista.get(i).getCpf();
+            valores[i][1] = lista.get(i).getNome();
+            valores[i][2] = lista.get(i).getQuantidade();
+            valores[i][3] = lista.get(i).getValor();
+        }
+        return new DefaultTableModel(valores, titulos);
     }
 
-    protected void persistir(BancoDados c, String cpf, String tipo) {
-        JDDados dados = new JDDados(this, true);
-        dados.setDados(c, cpf, tipo);
+    private void atualizarTabelaCliente() {
+        jTableCliente.setModel(getDadosTabela());
+    }
+
+    private void atualizarTabelaProduto() {
+        jTableProduto.setModel(getDadosTabelaProduto());
+    }
+
+    protected void persistir(Cliente c, String cpf) {
+        JDDadosCliente dados = new JDDadosCliente(this, true);
+        dados.setDados(c, cpf);
         dados.setVisible(true);
         // Modal -> Fica parado aqui até a janela "sumir"
         if (dados.sucesso) {
-            dDados.persistir(dados.getDados());
+            cCliente.persistir(dados.getDados());
+        }
+    }
+
+    protected void persistirProduto(Produto p, String cod) {
+        JDDadosProduto dados = new JDDadosProduto(this, true);
+        dados.setDados(p, cod);
+        dados.setVisible(true);
+        // Modal -> Fica parado aqui até a janela "sumir"
+        if (dados.sucesso) {
+            pProduto.persistir(dados.getDados());
         }
     }
 
     protected void remover(String cpf) {
-        dDados.remover(cpf);
+        cCliente.remover(cpf);
     }
 
-
-
-    protected BancoDados obter(String cpf) {
-        return dDados.obter(cpf);
+    protected void removerProduto(String cpf) {
+        pProduto.remover(cpf);
     }
 
-    protected String obterTipo(String cpf) {
-        return dDados.obter(cpf).getTipo();
+    protected Cliente obter(String cpf) {
+        return cCliente.obter(cpf);
+    }
+
+    protected Produto obterProduto(String cpf) {
+        return pProduto.obter(cpf);
     }
 
     protected void preActions() {
-        System.out.println("teste 1");
-//        dDados = new ControleBancoDados();
-
     }
 
     /**
@@ -129,18 +134,11 @@ public class JFPrincipal extends javax.swing.JFrame {
         jTableCliente = new javax.swing.JTable();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTableProduto = new javax.swing.JTable();
+        btmSair = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        btmSair = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
-        jMenuConectar = new javax.swing.JMenu();
-        mnuConectar = new javax.swing.JMenuItem();
-        mnuDesconectar = new javax.swing.JMenuItem();
-        mnuRecuperarCliente = new javax.swing.JMenuItem();
-        mnuRecuperarProdutos = new javax.swing.JMenuItem();
-        jSeparator2 = new javax.swing.JPopupMenu.Separator();
-        mnuSair = new javax.swing.JMenuItem();
-        jMenuClientes = new javax.swing.JMenu();
+        jMenu1 = new javax.swing.JMenu();
         mnuIncluirCliente = new javax.swing.JMenuItem();
         mnuAlterarCliente = new javax.swing.JMenuItem();
         mnuExcluirCliente = new javax.swing.JMenuItem();
@@ -152,21 +150,21 @@ public class JFPrincipal extends javax.swing.JFrame {
         mnuExcluirProduto = new javax.swing.JMenuItem();
         jSeparator3 = new javax.swing.JPopupMenu.Separator();
         mnuAtualizarProduto = new javax.swing.JMenuItem();
+        jMenu2 = new javax.swing.JMenu();
+        jRadioConectar = new javax.swing.JRadioButtonMenuItem();
+        jRadioDesconectar = new javax.swing.JRadioButtonMenuItem();
+        mnuArmazenar = new javax.swing.JMenuItem();
+        mnuRecuperar = new javax.swing.JMenuItem();
+        jSeparator2 = new javax.swing.JPopupMenu.Separator();
+        mnuSair = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Pandera Studios Cliente");
 
-        jTableCliente.setModel(getDadosTabela("C"));
+        jTableCliente.setModel(getDadosTabela());
         jScrollPane1.setViewportView(jTableCliente);
 
-        jTableProduto.setModel(getDadosTabela("P"));
+        jTableProduto.setModel(getDadosTabelaProduto());
         jScrollPane2.setViewportView(jTableProduto);
-
-        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel1.setText("CLIENTES");
-
-        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel2.setText("PRODUTOS");
 
         btmSair.setText("SAIR");
         btmSair.addActionListener(new java.awt.event.ActionListener() {
@@ -175,57 +173,13 @@ public class JFPrincipal extends javax.swing.JFrame {
             }
         });
 
-        jMenuConectar.setText("Conectar");
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel1.setText("CLIENTES");
 
-        mnuConectar.setText("Conectar no Servidor");
-        mnuConectar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mnuConectarActionPerformed(evt);
-            }
-        });
-        jMenuConectar.add(mnuConectar);
+        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel2.setText("PRODUTOS");
 
-        mnuDesconectar.setText("Desconectar do Servidor");
-        mnuDesconectar.setEnabled(false);
-        mnuDesconectar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mnuDesconectarActionPerformed(evt);
-            }
-        });
-        jMenuConectar.add(mnuDesconectar);
-
-        mnuRecuperarCliente.setText("Recuperar Dados Clientes");
-        mnuRecuperarCliente.setEnabled(false);
-        mnuRecuperarCliente.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mnuRecuperarClienteActionPerformed(evt);
-            }
-        });
-        jMenuConectar.add(mnuRecuperarCliente);
-
-        mnuRecuperarProdutos.setText("Recuperar Dados Produtos");
-        mnuRecuperarProdutos.setEnabled(false);
-        mnuRecuperarProdutos.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mnuRecuperarProdutosActionPerformed(evt);
-            }
-        });
-        jMenuConectar.add(mnuRecuperarProdutos);
-        jMenuConectar.add(jSeparator2);
-
-        mnuSair.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.ALT_MASK | java.awt.event.InputEvent.CTRL_MASK));
-        mnuSair.setText("Sair");
-        mnuSair.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mnuSairActionPerformed(evt);
-            }
-        });
-        jMenuConectar.add(mnuSair);
-
-        jMenuBar1.add(jMenuConectar);
-
-        jMenuClientes.setText("Clientes");
-        jMenuClientes.setEnabled(false);
+        jMenu1.setText("Clientes");
 
         mnuIncluirCliente.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_I, java.awt.event.InputEvent.ALT_MASK));
         mnuIncluirCliente.setText("Incluir");
@@ -234,7 +188,7 @@ public class JFPrincipal extends javax.swing.JFrame {
                 mnuIncluirClienteActionPerformed(evt);
             }
         });
-        jMenuClientes.add(mnuIncluirCliente);
+        jMenu1.add(mnuIncluirCliente);
 
         mnuAlterarCliente.setText("Alterar");
         mnuAlterarCliente.addActionListener(new java.awt.event.ActionListener() {
@@ -242,7 +196,7 @@ public class JFPrincipal extends javax.swing.JFrame {
                 mnuAlterarClienteActionPerformed(evt);
             }
         });
-        jMenuClientes.add(mnuAlterarCliente);
+        jMenu1.add(mnuAlterarCliente);
 
         mnuExcluirCliente.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_E, java.awt.event.InputEvent.ALT_MASK));
         mnuExcluirCliente.setText("Excluir");
@@ -251,8 +205,8 @@ public class JFPrincipal extends javax.swing.JFrame {
                 mnuExcluirClienteActionPerformed(evt);
             }
         });
-        jMenuClientes.add(mnuExcluirCliente);
-        jMenuClientes.add(jSeparator1);
+        jMenu1.add(mnuExcluirCliente);
+        jMenu1.add(jSeparator1);
 
         mnuAtualizarCliente.setText("Atualizar Tela");
         mnuAtualizarCliente.addActionListener(new java.awt.event.ActionListener() {
@@ -260,12 +214,11 @@ public class JFPrincipal extends javax.swing.JFrame {
                 mnuAtualizarClienteActionPerformed(evt);
             }
         });
-        jMenuClientes.add(mnuAtualizarCliente);
+        jMenu1.add(mnuAtualizarCliente);
 
-        jMenuBar1.add(jMenuClientes);
+        jMenuBar1.add(jMenu1);
 
         jMenuProdutos.setText("Produtos");
-        jMenuProdutos.setEnabled(false);
 
         mnuIncluirProduto.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_I, java.awt.event.InputEvent.ALT_MASK));
         mnuIncluirProduto.setText("Incluir");
@@ -304,6 +257,51 @@ public class JFPrincipal extends javax.swing.JFrame {
 
         jMenuBar1.add(jMenuProdutos);
 
+        jMenu2.setText("Conectar");
+
+        jRadioConectar.setSelected(true);
+        jRadioConectar.setText("Conectar Servidor");
+        jRadioConectar.setEnabled(false);
+        jMenu2.add(jRadioConectar);
+
+        jRadioDesconectar.setSelected(true);
+        jRadioDesconectar.setText("Desconectar Servidor");
+        jRadioDesconectar.setEnabled(false);
+        jRadioDesconectar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRadioDesconectarActionPerformed(evt);
+            }
+        });
+        jMenu2.add(jRadioDesconectar);
+
+        mnuArmazenar.setText("Armazenar Dados");
+        mnuArmazenar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuArmazenarActionPerformed(evt);
+            }
+        });
+        jMenu2.add(mnuArmazenar);
+
+        mnuRecuperar.setText("Recuperar Dados");
+        mnuRecuperar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuRecuperarActionPerformed(evt);
+            }
+        });
+        jMenu2.add(mnuRecuperar);
+        jMenu2.add(jSeparator2);
+
+        mnuSair.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.ALT_MASK | java.awt.event.InputEvent.CTRL_MASK));
+        mnuSair.setText("Sair");
+        mnuSair.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuSairActionPerformed(evt);
+            }
+        });
+        jMenu2.add(mnuSair);
+
+        jMenuBar1.add(jMenu2);
+
         setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -311,48 +309,55 @@ public class JFPrincipal extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(49, 49, 49)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(btmSair)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel1))
-                        .addGap(40, 40, 40)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel2)
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 252, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(44, Short.MAX_VALUE))
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 196, Short.MAX_VALUE)
+                        .addComponent(jLabel2)
+                        .addGap(162, 162, 162))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(btmSair))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(jLabel2))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 326, Short.MAX_VALUE)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
-                .addGap(18, 18, 18)
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel2)
+                        .addGap(11, 11, 11)))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 281, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 281, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btmSair)
-                .addContainerGap(23, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void mnuAtualizarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuAtualizarClienteActionPerformed
-        atualizarTabela();
+        atualizarTabelaCliente();
     }//GEN-LAST:event_mnuAtualizarClienteActionPerformed
 
     private void mnuIncluirClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuIncluirClienteActionPerformed
         String cpf = entraCPF(true); // recebera codigo digitado
         if (cpf != null) {
             if (!cpf.isEmpty()) {
-                persistir(null, cpf, CLIENTE);
-                atualizarTabela();
+                persistir(null, cpf);
+                atualizarTabelaCliente();
             }
         }
     }//GEN-LAST:event_mnuIncluirClienteActionPerformed
@@ -361,10 +366,8 @@ public class JFPrincipal extends javax.swing.JFrame {
         String cpf = entraCPF(false); // recebera codigo digitado
         if (cpf != null) {
             if (!cpf.isEmpty()) {
-                if (CLIENTE.equals(obterTipo(cpf))) {
-                    persistir(obter(cpf), cpf, CLIENTE);
-                    atualizarTabela();
-                }
+                persistir(obter(cpf), cpf);
+                atualizarTabelaCliente();
             }
         }
     }//GEN-LAST:event_mnuAlterarClienteActionPerformed
@@ -373,52 +376,50 @@ public class JFPrincipal extends javax.swing.JFrame {
         String cpf = entraCPF(false); // recebera codigo digitado
         if (cpf != null) {
             if (!cpf.isEmpty()) {
-                if (CLIENTE.equals(obterTipo(cpf))) {
-                    remover(cpf);
-                    atualizarTabela();
-                }
+                remover(cpf);
+                atualizarTabelaCliente();
             }
         }
     }//GEN-LAST:event_mnuExcluirClienteActionPerformed
 
-    private void mnuRecuperarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuRecuperarClienteActionPerformed
+    private void mnuArmazenarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuArmazenarActionPerformed
 
         try {
-            ControleBancoDados.carregarDados();
+            ControleCliente.armazenar();
+            ControleProduto.armazenar();
         } catch (IOException | ClassNotFoundException ex) {
             Logger.getLogger(JFPrincipal.class.getName()).log(Level.SEVERE, null, ex);
         }
-        atualizarTabela(); // estava faltando isso para recuperar a tabela.
-    }//GEN-LAST:event_mnuRecuperarClienteActionPerformed
+        atualizarTabelaCliente();
+        atualizarTabelaProduto();
+    }//GEN-LAST:event_mnuArmazenarActionPerformed
+
+    private void mnuRecuperarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuRecuperarActionPerformed
+
+        try {
+            ControleCliente.carregar();
+            ControleProduto.carregar();
+        } catch (IOException | ClassNotFoundException ex) {
+            Logger.getLogger(JFPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        atualizarTabelaCliente();
+        atualizarTabelaProduto();
+    }//GEN-LAST:event_mnuRecuperarActionPerformed
 
     private void mnuSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuSairActionPerformed
         // TODO add your handling code here:
-
         sairPgm();
-
     }//GEN-LAST:event_mnuSairActionPerformed
-
-    private void sairPgm() {
-        // TODO add your handling code here:
-        int sair = 0;
-        sair = JOptionPane.showConfirmDialog(null, "Confirma Sair do Programa?",
-                "Cliente", JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE);
-        if (sair == 0) {
-            jTableCliente.removeAll();
-            jTableProduto.removeAll();
-            System.exit(0);
-        }
-    }
-
 
     private void mnuIncluirProdutoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuIncluirProdutoActionPerformed
         // TODO add your handling code here:
-
         String cpf = entraCPF(false); // recebera codigo digitado
         if (cpf != null) {
             if (!cpf.isEmpty()) {
-                persistir(null, cpf, PRODUTO);
-                atualizarTabela();
+                // Modal -> Fica parado aqui até a janela "sumir"
+                persistirProduto(null, "" + cpf);
+                atualizarTabelaProduto();
             }
         }
     }//GEN-LAST:event_mnuIncluirProdutoActionPerformed
@@ -428,77 +429,58 @@ public class JFPrincipal extends javax.swing.JFrame {
         String cpf = entraCPF(false); // recebera codigo digitado
         if (cpf != null) {
             if (!cpf.isEmpty()) {
-                if (PRODUTO.equals(obterTipo(cpf))) {
-                    persistir(obter(cpf), cpf, PRODUTO);
-                    atualizarTabela();
-                }
+                persistirProduto(obterProduto(cpf), cpf);
+                atualizarTabelaProduto();
             }
         }
     }//GEN-LAST:event_mnuAlterarProdutoActionPerformed
-
-    //        
 
     private void mnuExcluirProdutoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuExcluirProdutoActionPerformed
         // TODO add your handling code here:
         String cpf = entraCPF(false); // recebera codigo digitado
         if (cpf != null) {
             if (!cpf.isEmpty()) {
-                if (PRODUTO.equals(obterTipo(cpf))) {
-                    remover(cpf);
-                    atualizarTabela();
-                }
+                removerProduto(cpf);
+                atualizarTabelaProduto();
             }
         }
     }//GEN-LAST:event_mnuExcluirProdutoActionPerformed
 
     private void mnuAtualizarProdutoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuAtualizarProdutoActionPerformed
         // TODO add your handling code here:
-        atualizarTabela();
+        atualizarTabelaProduto();
     }//GEN-LAST:event_mnuAtualizarProdutoActionPerformed
-
-    private void mnuRecuperarProdutosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuRecuperarProdutosActionPerformed
-        // TODO add your handling code here:
-        try {
-            ControleBancoDados.carregarDados();
-        } catch (IOException | ClassNotFoundException ex) {
-            Logger.getLogger(JFPrincipal.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        atualizarTabela();
-    }//GEN-LAST:event_mnuRecuperarProdutosActionPerformed
 
     private void btmSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btmSairActionPerformed
         // TODO add your handling code here:
         sairPgm();
     }//GEN-LAST:event_btmSairActionPerformed
 
-    private void mnuConectarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuConectarActionPerformed
+    private void jRadioDesconectarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioDesconectarActionPerformed
         // TODO add your handling code here:
+    }//GEN-LAST:event_jRadioDesconectarActionPerformed
 
-        mnuDesconectar.setEnabled(true);
-        mnuRecuperarCliente.setEnabled(true);
-        mnuRecuperarProdutos.setEnabled(true);
-        jMenuClientes.setEnabled(true);
-        jMenuProdutos.setEnabled(true);
-    }//GEN-LAST:event_mnuConectarActionPerformed
-
-    private void mnuDesconectarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuDesconectarActionPerformed
+    private void sairPgm() {
         // TODO add your handling code here:
-
-        mnuDesconectar.setEnabled(false);
-        mnuRecuperarCliente.setEnabled(false);
-        mnuRecuperarProdutos.setEnabled(false);
-        jMenuClientes.setEnabled(false);
-        jMenuProdutos.setEnabled(false);
-    }//GEN-LAST:event_mnuDesconectarActionPerformed
+        int sair;
+        sair = JOptionPane.showConfirmDialog(null,
+                "Confirma Sair do Programa?", "Cliente",
+                JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE);
+        if (sair == 0) {
+            jTableCliente.removeAll();
+            jTableProduto.removeAll();
+            System.exit(0);
+        }
+    }
 
     private String entraCPF(boolean isIncluir) {
         // TODO add your handling code here:
         String cpf = "";
         boolean isCadastro = false;
 
-        ArrayList<BancoDados> cpfCod = (obterTodos());
+        ArrayList<Cliente> cpfCod = (obterTodos());
 
-        // loop enquanto teclar vazio ou not fim 
+        // loop enquanto teclar vazio ou not fim
         while (cpf.isEmpty() || true) {
             // janela de input do CPF
             cpf = JOptionPane.showInputDialog(this, "CPF");
@@ -506,15 +488,18 @@ public class JFPrincipal extends javax.swing.JFrame {
                 return null;
             } else if (cpf.isEmpty()) {
                 // SE DER <ENTER> JOGA MENSAGEM DE ERRO e VOLTA AO LOOP.
-                JOptionPane.showMessageDialog(null, "Por Favor, Digite Algo!", "Msg do Servidor",
-                        JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Por Favor, Digite Algo!",
+                        "Msg do Servidor", JOptionPane.INFORMATION_MESSAGE);
             } else {
 
-                for (BancoDados cpfCod1 : cpfCod) {
+                for (Cliente cpfCod1 : cpfCod) {
                     if (cpf.equals(cpfCod1.getCpf())) {
                         if (isIncluir) {
-                            // ENQUANTO NAO ENCONTRA JOGA MENSAGEM DE ERRO e VOLTA AO LOOP.
-                            JOptionPane.showMessageDialog(null, "Cliente Ja Cadastrado!!!", "Msg do Servidor",
+                            // ENQUANTO NAO ENCONTRA JOGA MENSAGEM DE ERRO e
+                            // VOLTA AO LOOP.
+                            JOptionPane.showMessageDialog(null,
+                                    "Cliente Ja Cadastrado!!!",
+                                    "Msg do Servidor",
                                     JOptionPane.INFORMATION_MESSAGE);
                             isCadastro = true;
                             break;
@@ -526,8 +511,10 @@ public class JFPrincipal extends javax.swing.JFrame {
                 }
 
                 if (!isIncluir) {
-                    // ENQUANTO NAO ENCONTRA JOGA MENSAGEM DE ERRO e VOLTA AO LOOP.
-                    JOptionPane.showMessageDialog(null, "Cliente nao encontrado!!!", "Msg do Servidor",
+                    // ENQUANTO NAO ENCONTRA JOGA MENSAGEM DE ERRO e VOLTA AO
+                    // LOOP.
+                    JOptionPane.showMessageDialog(null,
+                            "Cliente nao encontrado!!!", "Msg do Servidor",
                             JOptionPane.INFORMATION_MESSAGE);
                 } else {
                     if (!isCadastro) {
@@ -544,14 +531,37 @@ public class JFPrincipal extends javax.swing.JFrame {
      * @param args the command line arguments
      */
     public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
 
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(JFPrincipal.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(JFPrincipal.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(JFPrincipal.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(JFPrincipal.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new JFPrincipal().setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            new JFPrincipal().setVisible(true);
         });
     }
 
@@ -559,10 +569,12 @@ public class JFPrincipal extends javax.swing.JFrame {
     private javax.swing.JButton btmSair;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenu jMenuClientes;
-    private javax.swing.JMenu jMenuConectar;
     private javax.swing.JMenu jMenuProdutos;
+    private javax.swing.JRadioButtonMenuItem jRadioConectar;
+    private javax.swing.JRadioButtonMenuItem jRadioDesconectar;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JPopupMenu.Separator jSeparator1;
@@ -572,16 +584,14 @@ public class JFPrincipal extends javax.swing.JFrame {
     private javax.swing.JTable jTableProduto;
     private javax.swing.JMenuItem mnuAlterarCliente;
     private javax.swing.JMenuItem mnuAlterarProduto;
+    private javax.swing.JMenuItem mnuArmazenar;
     private javax.swing.JMenuItem mnuAtualizarCliente;
     private javax.swing.JMenuItem mnuAtualizarProduto;
-    private javax.swing.JMenuItem mnuConectar;
-    private javax.swing.JMenuItem mnuDesconectar;
     private javax.swing.JMenuItem mnuExcluirCliente;
     private javax.swing.JMenuItem mnuExcluirProduto;
     private javax.swing.JMenuItem mnuIncluirCliente;
     private javax.swing.JMenuItem mnuIncluirProduto;
-    private javax.swing.JMenuItem mnuRecuperarCliente;
-    private javax.swing.JMenuItem mnuRecuperarProdutos;
+    private javax.swing.JMenuItem mnuRecuperar;
     private javax.swing.JMenuItem mnuSair;
     // End of variables declaration//GEN-END:variables
 }

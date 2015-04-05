@@ -5,11 +5,15 @@
  */
 package servidor;
 
-import controle.ControleBancoDados;
+import controle.ControleCliente;
+import controle.ControleProduto;
+
 import java.io.IOException;
 import java.net.ServerSocket;
+import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
@@ -24,7 +28,8 @@ public class ServidorPlay extends Thread {
      * @param args the command line arguments
      */
     private ServerSocket s0;
-//    private ArrayList<String> listaA;
+    private ServerSocket s1;
+    private Socket s2;
 
     private DefaultListModel<String> clienteON;
     private DefaultListModel<String> clienteOFF;
@@ -47,9 +52,15 @@ public class ServidorPlay extends Thread {
 
     public void pararServ() {
         //      this.thcliente.interrupt();
-            clienteOFF.insertElementAt(numCliente + " - IP: " + s0.getInetAddress(), 0);
+        try {
+            clienteOFF.insertElementAt(numCliente + " - IP: " + s2.getInetAddress(), 0);
+
+        } catch (Exception ex) {
+
+        }
         try {
             s0.close();
+            s1.close();
         } catch (IOException ex) {
             Logger.getLogger(ServidorPlay.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -62,6 +73,7 @@ public class ServidorPlay extends Thread {
 
         try {
             s0 = new ServerSocket(5050);
+            s1 = new ServerSocket(6060);
         } catch (IOException ex) {
             Logger.getLogger(JFPrinicipalServidor.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -70,32 +82,44 @@ public class ServidorPlay extends Thread {
     public void run() {
         // TODO code application logic here
         System.out.println("Cheguei Aqui 2.1");
-
-        try {
-            ControleBancoDados.carregarDados();
             status.setText("ONLINE");
             txtNumClientes.setText("" + numCliente);
+
+
+        try {
+            ControleCliente.carregar();
+            status.setText("ONLINE");
+            txtNumClientes.setText("" + numCliente);
+
         } catch (IOException | ClassNotFoundException ex) {
-            JOptionPane.showMessageDialog(null, "Não foi possível Ler o Arquivo .bin !!!",
+            JOptionPane.showMessageDialog(null, "Não foi possível Ler o Arquivo Cliente !!!",
                     "Servidor", JOptionPane.INFORMATION_MESSAGE);
             Logger.getLogger(ServidorPlay.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                ControleProduto.carregar();
+            } catch (IOException | ClassNotFoundException ex) {
+                JOptionPane.showMessageDialog(null, "Não foi possível Ler o Arquivo Produto !!!",
+                        "Servidor", JOptionPane.INFORMATION_MESSAGE);
+                Logger.getLogger(ServidorPlay.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
 
         while (true) {
 
             try {
-                new ThCliente(s0.accept(), ipCliente).start();
+                s2 = s0.accept();
+                new ThCliente(s2).start();
+                new ThProduto(s1.accept()).start();
             } catch (IOException ex) {
                 Logger.getLogger(ServidorPlay.class.getName()).log(Level.SEVERE, null, ex);
             }
 
             numCliente++;
-
             txtNumClientes.setText("" + numCliente);
+            clienteON.insertElementAt(numCliente + " - IP: " + s2.getInetAddress(), 0);
 
-            clienteON.insertElementAt(numCliente + " - IP: " + s0.getInetAddress(), 0);
-
-            System.out.println("ip>" + s0.getInetAddress());
+            System.out.println("ip>" + s2.getInetAddress());
         }
     }
 }

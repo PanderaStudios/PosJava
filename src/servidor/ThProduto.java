@@ -8,50 +8,50 @@ import java.net.Socket;
 import modelo.Cliente;
 import modelo.Produto;
 
-public class ThCliente extends Thread {
+public class ThProduto extends Thread {
 
-    private Socket s;
+    private Socket p;
 
-    public ThCliente(Socket s) {
-        this.s = s;
+    public ThProduto(Socket p) {
+        this.p = p;
     }
 
     @Override
     public void run() {
         try {
-            ControleComunicacao c1 = new ControleComunicacao(s);
+            ControleComunicacao c1 = new ControleComunicacao(p);
 
-            ControleCliente cCliente = new ControleCliente();
+            ControleProduto cProduto = new ControleProduto();
 
             while (true) {
                 String comando = c1.receberTexto();
 
                 if ("P".equals(comando)) {
-                    System.out.println("Cheguei Aqui ThCliente 1.0");
-                    cCliente.persistir((Cliente) c1.receberObjeto());
-                    ControleCliente.armazenar();
+                    System.out.println("Cheguei Aqui ThProduto 1.0");
+                    cProduto.persistir((Produto) c1.receberObjeto());
+                    ControleProduto.armazenar();
                 }
 
                 if ("R".equals(comando)) {
-                    cCliente.remover(c1.receberTexto());
-                    ControleCliente.armazenar();
+                    cProduto.remover(c1.receberTexto());
+                    ControleProduto.armazenar();
                 }
 
                 if ("O".equals(comando)) {
                     String cpf = c1.receberTexto();
-                    c1.enviarObjeto(cCliente.obter(cpf));
+                    c1.enviarObjeto(cProduto.obter(cpf));
                 }
 
                 if ("T".equals(comando)) {
-                    c1.enviarObjeto(cCliente.obterTodos());
+                    c1.enviarObjeto(cProduto.obterTodos());
                 }
-                
+
                 if ("G".equals(comando)) {
-                    ControleCliente.armazenar();
+                    ControleProduto.armazenar();
                 }
                 
                 if ("C".equals(comando)) {
-                    ControleCliente.carregar();
+                    ControleProduto.carregar();
                 }
 
             }
