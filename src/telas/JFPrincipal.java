@@ -56,14 +56,14 @@ public class JFPrincipal extends javax.swing.JFrame {
         ArrayList<Produto> lista1 = obterTodosProdutos();
         String[] titulos
                 = {"COD", "Nome", "Quantidade", "Valor"};
-        Object[][] valores = new Object[lista1.size()][4];
+        Object[][] valores1 = new Object[lista1.size()][4];
         for (int i = 0; i < lista1.size(); i++) {
-            valores[i][0] = lista1.get(i).getCpf();
-            valores[i][1] = lista1.get(i).getNome();
-            valores[i][2] = lista1.get(i).getQuantidade();
-            valores[i][3] = lista1.get(i).getValor();
+            valores1[i][0] = lista1.get(i).getCpf();
+            valores1[i][1] = lista1.get(i).getNome();
+            valores1[i][2] = lista1.get(i).getQuantidade();
+            valores1[i][3] = lista1.get(i).getValor();
         }
-        return new DefaultTableModel(valores, titulos);
+        return new DefaultTableModel(valores1, titulos);
     }
 
     private void atualizarTabela() {

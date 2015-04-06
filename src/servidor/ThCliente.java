@@ -2,11 +2,9 @@ package servidor;
 
 import comum.controle.ControleComunicacao;
 import controle.ControleCliente;
-import controle.ControleProduto;
 import java.io.IOException;
 import java.net.Socket;
 import modelo.Cliente;
-import modelo.Produto;
 
 public class ThCliente extends Thread {
 

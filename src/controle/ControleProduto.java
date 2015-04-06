@@ -16,106 +16,107 @@ import javax.swing.JOptionPane;
 import modelo.Produto;
 
 public class ControleProduto {
-    
+
     private final static String PRODUTOS = "Produtos";
     private final static String pasta = ":\\TrabalhoJava\\";
-    private final static String arquivo = ".bin";    
-    private static String dir ="";
-    
-    
-    private static HashMap<String,Produto>
-            bancoProdutos = new HashMap<String, Produto>();
+    private final static String arquivo = ".bin";
+    private static String dir = "d";
+
+    private static HashMap<String, Produto> bancoProdutos = new HashMap<String, Produto>();
 
     public ControleProduto() { //throws IOException, ClassNotFoundException{
-       // ControleCliente.carregarDados();
-    
+        // ControleCliente.carregarDados();
+
     }
-    
-    public static void carregar() throws IOException, ClassNotFoundException{
-        File  file = ControleProduto.verificaArquivo(PRODUTOS);
-           
+
+    public static void carregar() throws IOException, ClassNotFoundException {
+        File file = ControleProduto.verificaArquivo(PRODUTOS);
+
         BufferedReader buffer = new BufferedReader(new FileReader(file));
-        
+
         String linha = buffer.readLine();
-        
-        if(linha != null){
-            try 
-                (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(dir +pasta + PRODUTOS  + arquivo))) {
+
+        if (linha != null) {
+            try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(dir + pasta + PRODUTOS + arquivo))) {
                 bancoProdutos = (HashMap<String, Produto>) ois.readObject();
             }
-          
-         }
+
+        }
     }
-    
-     public static File verificaArquivo( String nomeArq) throws IOException, ClassNotFoundException{
-      
-        boolean retorno = false;
-       
-        while (dir.isEmpty()){
-            dir = JOptionPane.showInputDialog(null, "Informe o Disco do arquivo Produto (Ex. C ou D).",
-                    "MSG Servidor", JOptionPane.INFORMATION_MESSAGE);
+
+    public static void armazenar() throws IOException, ClassNotFoundException {
+        //heraldo feito a validacao do arquivo
+        File file = ControleProduto.verificaArquivo(PRODUTOS);
+
+        BufferedReader buffer = new BufferedReader(new FileReader(file));
+
+        String linha = buffer.readLine();
+
+        if (linha != null || !bancoProdutos.isEmpty()) {
+            ObjectOutputStream oos = new ObjectOutputStream(
+                    new FileOutputStream(dir + pasta + PRODUTOS + arquivo));
+            oos.writeObject(bancoProdutos);
+            oos.flush();
+            oos.close();
         }
-        
+
+    }
+
+    public static File verificaArquivo(String nomeArq) throws IOException, ClassNotFoundException {
+
+  //      boolean retorno = false;
         File file = new File(dir + pasta + PRODUTOS + arquivo);
-        
-        if (!file.exists()){
-          file = new File(dir + pasta);  
-          file.mkdir();
-          file = new File(dir + pasta +PRODUTOS + arquivo);
-          file.createNewFile();
-          JOptionPane.showConfirmDialog(null,"Arquivo Produto criado com sucesso em " + 
-                  dir + pasta + PRODUTOS + arquivo,"MSG Servidor",
-                  JOptionPane.INFORMATION_MESSAGE);        
+        if (!file.exists()) {
+            dir = "";
+            while (dir.isEmpty() || (!dir.equalsIgnoreCase("c") && !dir.equalsIgnoreCase("d"))) {
+                if ((dir = JOptionPane.showInputDialog(null, "Informe o Disco do arquivo Produto (Ex. C ou D).",
+                        "MSG Servidor", JOptionPane.INFORMATION_MESSAGE)) == null) {
+                    dir = "d";
+                }
+            }
+//        File file = new File(dir + pasta + PRODUTOS + arquivo);
+            file.renameTo(new File(dir + pasta + PRODUTOS + arquivo));
+
+            if (!file.exists()) {
+                file = new File(dir + pasta);
+                file.mkdir();
+                file = new File(dir + pasta + PRODUTOS + arquivo);
+                file.createNewFile();
+                JOptionPane.showMessageDialog(null, "Arquivo Produto criado com sucesso em "
+                        + dir + pasta + PRODUTOS + arquivo, "MSG Servidor",
+                        JOptionPane.INFORMATION_MESSAGE);
+            }
         }
-       
         return file;
     }
 
-    public static void armazenar() throws IOException, ClassNotFoundException{
-      //heraldo feito a validacao do arquivo
-        File  file = ControleProduto.verificaArquivo(PRODUTOS);
-        
-        BufferedReader buffer = new BufferedReader(new FileReader(file));
-        
-        String linha = buffer.readLine();
-        
-        if(linha != null || !bancoProdutos.isEmpty()){
-                ObjectOutputStream oos = new ObjectOutputStream(
-                                new FileOutputStream(dir + pasta + PRODUTOS + arquivo));
-                oos.writeObject(bancoProdutos);
-                oos.flush();
-                oos.close();
-        }
-
-    }
-    
-    public void persistir(Produto produto){
+    public void persistir(Produto produto) {
         bancoProdutos.put(produto.getCpf(), produto);
     }
-    
-    public void remover(String cpf){
+
+    public void remover(String cpf) {
         bancoProdutos.remove(cpf);
     }
-    
-    public Produto obter(String cpf){
-        if(bancoProdutos.containsKey(cpf))
+
+    public Produto obter(String cpf) {
+        if (bancoProdutos.containsKey(cpf)) {
             return bancoProdutos.get(cpf);
-        else 
+        } else {
             return null;
+        }
     }
-    
-    public ArrayList<Produto> obterTodos(){
-        ArrayList<Produto> lista = new ArrayList<Produto>();
+
+    public ArrayList<Produto> obterTodos() {
+        ArrayList<Produto> lista = new ArrayList<>();
         lista.addAll(bancoProdutos.values());
-        Collections.sort(lista,new Comparator<Produto>() {
+        Collections.sort(lista, new Comparator<Produto>() {
             public int compare(Produto t1, Produto t2) {
-                return (t1.getNome()==null)?
-                       (t2.getNome()==null)?0:-1:
-                        t1.getNome().compareTo(t2.getNome());
+                return (t1.getNome() == null)
+                        ? (t2.getNome() == null) ? 0 : -1
+                        : t1.getNome().compareTo(t2.getNome());
             }
         });
-        return lista;        
+        return lista;
     }
-    
+
 }
- 

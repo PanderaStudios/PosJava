@@ -30,13 +30,13 @@ public class ServidorPlay extends Thread {
     private ServerSocket s0;
     private ServerSocket s1;
     private Socket s2;
+    private Socket s3;
 
     private DefaultListModel<String> clienteON;
     private DefaultListModel<String> clienteOFF;
 
-    //   private JList listaA;
+    // Controle de textos na janela
     private JTextField status;
-
     private JTextField txtNumClientes;
 
     private int numCliente;
@@ -69,7 +69,7 @@ public class ServidorPlay extends Thread {
     private void preActions() {
 
         numCliente = 0;
-        ipCliente = "127.0.0.1";
+        ipCliente = "255.255.255.1";
 
         try {
             s0 = new ServerSocket(5050);
@@ -81,10 +81,9 @@ public class ServidorPlay extends Thread {
 
     public void run() {
         // TODO code application logic here
-        System.out.println("Cheguei Aqui 2.1");
-            status.setText("ONLINE");
-            txtNumClientes.setText("" + numCliente);
-
+        System.out.println("Classe Servidor Play - run()");
+        status.setText("ONLINE");
+        txtNumClientes.setText("" + numCliente);
 
         try {
             ControleCliente.carregar();
@@ -95,22 +94,31 @@ public class ServidorPlay extends Thread {
             JOptionPane.showMessageDialog(null, "Não foi possível Ler o Arquivo Cliente !!!",
                     "Servidor", JOptionPane.INFORMATION_MESSAGE);
             Logger.getLogger(ServidorPlay.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            try {
-                ControleProduto.carregar();
-            } catch (IOException | ClassNotFoundException ex) {
-                JOptionPane.showMessageDialog(null, "Não foi possível Ler o Arquivo Produto !!!",
-                        "Servidor", JOptionPane.INFORMATION_MESSAGE);
-                Logger.getLogger(ServidorPlay.class.getName()).log(Level.SEVERE, null, ex);
-            }
+        }
+
+        try {
+            ControleProduto.carregar();
+        } catch (IOException | ClassNotFoundException ex) {
+            JOptionPane.showMessageDialog(null, "Não foi possível Ler o Arquivo Produto !!!",
+                    "Servidor", JOptionPane.INFORMATION_MESSAGE);
+            Logger.getLogger(ServidorPlay.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         while (true) {
 
             try {
-                s2 = s0.accept();
-                new ThCliente(s2).start();
+//                s2 = s0.accept();
+//                s3 = s1.accept();
+//                new ThCliente(s2).start();
+//                new ThProduto(s3).start();
+
+                new ThCliente(s0.accept()).start();
                 new ThProduto(s1.accept()).start();
+
+                
+                System.out.println("Cliente Conectado Porta 5050> " + s2.isConnected());
+                System.out.println("Cliente Conectado Porta 6060> " + s3.isConnected());
+
             } catch (IOException ex) {
                 Logger.getLogger(ServidorPlay.class.getName()).log(Level.SEVERE, null, ex);
             }

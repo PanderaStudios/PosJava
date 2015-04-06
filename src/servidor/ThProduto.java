@@ -1,11 +1,9 @@
 package servidor;
 
 import comum.controle.ControleComunicacao;
-import controle.ControleCliente;
 import controle.ControleProduto;
 import java.io.IOException;
 import java.net.Socket;
-import modelo.Cliente;
 import modelo.Produto;
 
 public class ThProduto extends Thread {
@@ -27,30 +25,24 @@ public class ThProduto extends Thread {
                 String comando = c1.receberTexto();
 
                 if ("P".equals(comando)) {
-                    System.out.println("ServidorProduto ThCliente - persistir");
-                    c1.enviarTexto("ServidorProduto ThCliente - persistir");
+                    System.out.println("ServidorProduto ThProduto - persistir");
+                    c1.enviarTexto("ServidorProduto ThProduto - persistir");
                     cProduto.persistir((Produto) c1.receberObjeto());
                     ControleProduto.armazenar();
                 }
 
                 if ("R".equals(comando)) {
-                    System.out.println("ServidorProduto ThCliente - remover");
-                    c1.enviarTexto("ServidorProduto ThCliente - remover");
+                    System.out.println("ServidorProduto ThProduto - remover");
+                    c1.enviarTexto("ServidorProduto ThProduto - remover");
                     cProduto.remover(c1.receberTexto());
                     ControleProduto.armazenar();
                 }
 
                 if ("O".equals(comando)) {
-                    System.out.println("ServidorProduto ThCliente - obter");
-                    c1.enviarTexto("ServidorProduto ThCliente - obter");
+                    System.out.println("ServidorProduto ThProduto - obter");
+                    c1.enviarTexto("ServidorProduto ThProduto - obter");
                     String cpf = c1.receberTexto();
                     c1.enviarObjeto(cProduto.obter(cpf));
-                }
-
-                if ("T".equals(comando)) {
-                    System.out.println("ServidorProduto ThCliente - obter todos");
-                    c1.enviarTexto("ServidorProduto ThCliente - obter todos");
-                    c1.enviarObjeto(cProduto.obterTodos());
                 }
 
                 if ("G".equals(comando)) {
@@ -60,7 +52,14 @@ public class ThProduto extends Thread {
                 if ("C".equals(comando)) {
                     ControleProduto.carregar();
                 }
-                c1.enviarObjeto(cProduto.obterTodos());
+
+                if ("T".equals(comando)) {
+                    System.out.println("ServidorProduto ThProduto - obter todos");
+                    c1.enviarTexto("ServidorProduto ThProduto - obter todos");
+                    c1.enviarObjeto(cProduto.obterTodos());
+                }
+
+//                c1.enviarObjeto(cProduto.obterTodos());
 
             }
         } catch (IOException | ClassNotFoundException ex) {
