@@ -12,7 +12,7 @@ import modelo.Produto;
 public class JFPrincipalRemota extends JFPrincipal {
 
     public JFPrincipalRemota() {
-        carregaTabelas();
+//        carregaTabelas();
     }
 
     ControleComunicacao c1c;
@@ -28,7 +28,6 @@ public class JFPrincipalRemota extends JFPrincipal {
         System.out.println("CLIENTE - Vetor Produtos vazio> " + lista2.isEmpty());
     }
 
-    @Override
     protected void remover(String cpf) {
         try {
             c1c.enviarTexto("R");
@@ -41,7 +40,6 @@ public class JFPrincipalRemota extends JFPrincipal {
         }
     }
 
-    @Override
     protected void removerProduto(String cpf) {
         try {
             c2p.enviarTexto("R");
@@ -54,7 +52,6 @@ public class JFPrincipalRemota extends JFPrincipal {
         }
     }
 
-    @Override
     protected void persistir(Cliente c, String cpf) {
         JDDadosCliente dadosC = new JDDadosCliente(this, true);
         dadosC.setDados(c, cpf);
@@ -91,7 +88,6 @@ public class JFPrincipalRemota extends JFPrincipal {
         }
     }
 
-    @Override
     protected Cliente obter(String cpf) {
         try {
             c1c.enviarTexto("O");
@@ -104,7 +100,6 @@ public class JFPrincipalRemota extends JFPrincipal {
         }
     }
 
-    @Override
     protected Produto obterProduto(String cpf) {
         try {
             c2p.enviarTexto("O");
@@ -117,25 +112,24 @@ public class JFPrincipalRemota extends JFPrincipal {
         }
     }
 
-    @Override
     protected ArrayList<Cliente> obterTodos() {
         try {
             c1c.enviarTexto("T");
             System.out.println(c1c.receberTexto());
             System.out.println("Cliente - obter todos clientes");
             return (ArrayList<Cliente>) c1c.receberObjeto();
-        } catch (IOException | ClassNotFoundException ex) {
+        } catch (NullPointerException | IOException | ClassNotFoundException ex) {
             return new ArrayList<>();
         }
     }
 
-    protected ArrayList<Produto> obterTodosProduto() {
+    protected ArrayList<Produto> obterTodosProdutos() {
         try {
             c2p.enviarTexto("T");
             System.out.println(c2p.receberTexto());
             System.out.println("Cliente - obter todos produtos");
             return (ArrayList<Produto>) c2p.receberObjeto();
-        } catch (IOException | ClassNotFoundException ex) {
+        } catch (NullPointerException | IOException | ClassNotFoundException ex) {
             return new ArrayList<>();
         }
 

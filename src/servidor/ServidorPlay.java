@@ -107,15 +107,11 @@ public class ServidorPlay extends Thread {
         while (true) {
 
             try {
-//                s2 = s0.accept();
-//                s3 = s1.accept();
-//                new ThCliente(s2).start();
-//                new ThProduto(s3).start();
+                s2 = s0.accept();
+                s3 = s1.accept();
+                new ThCliente(s2).start();
+                new ThProduto(s3).start();
 
-                new ThCliente(s0.accept()).start();
-                new ThProduto(s1.accept()).start();
-
-                
                 System.out.println("Cliente Conectado Porta 5050> " + s2.isConnected());
                 System.out.println("Cliente Conectado Porta 6060> " + s3.isConnected());
 

@@ -64,7 +64,6 @@ public class ControleProduto {
 
     public static File verificaArquivo(String nomeArq) throws IOException, ClassNotFoundException {
 
-  //      boolean retorno = false;
         File file = new File(dir + pasta + PRODUTOS + arquivo);
         if (!file.exists()) {
             dir = "";
@@ -74,7 +73,7 @@ public class ControleProduto {
                     dir = "d";
                 }
             }
-//        File file = new File(dir + pasta + PRODUTOS + arquivo);
+
             file.renameTo(new File(dir + pasta + PRODUTOS + arquivo));
 
             if (!file.exists()) {
