@@ -27,7 +27,7 @@ public class JFPrincipal extends javax.swing.JFrame {
     protected ControleCliente cCliente
             = new ControleCliente();
 
-    protected ControleProduto pProduto
+    protected ControleProduto cProduto
             = new ControleProduto();
 
     protected ArrayList<Cliente> obterTodos() {
@@ -35,7 +35,7 @@ public class JFPrincipal extends javax.swing.JFrame {
     }
 
     protected ArrayList<Produto> obterTodosProdutos() {
-        return pProduto.obterTodos();
+        return cProduto.obterTodos();
     }
 
     protected TableModel getDadosTabela() {
@@ -53,27 +53,27 @@ public class JFPrincipal extends javax.swing.JFrame {
     }
 
     protected TableModel getDadosTabelaProduto() {
-        ArrayList<Produto> lista = obterTodosProdutos();
+        ArrayList<Produto> lista1 = obterTodosProdutos();
         String[] titulos
                 = {"COD", "Nome", "Quantidade", "Valor"};
-        Object[][] valores = new Object[lista.size()][4];
-        for (int i = 0; i < lista.size(); i++) {
-            valores[i][0] = lista.get(i).getCpf();
-            valores[i][1] = lista.get(i).getNome();
-            valores[i][2] = lista.get(i).getQuantidade();
-            valores[i][3] = lista.get(i).getValor();
+        Object[][] valores = new Object[lista1.size()][4];
+        for (int i = 0; i < lista1.size(); i++) {
+            valores[i][0] = lista1.get(i).getCpf();
+            valores[i][1] = lista1.get(i).getNome();
+            valores[i][2] = lista1.get(i).getQuantidade();
+            valores[i][3] = lista1.get(i).getValor();
         }
         return new DefaultTableModel(valores, titulos);
     }
 
-    private void atualizarTabelaCliente() {
+    private void atualizarTabela() {
         jTableCliente.setModel(getDadosTabela());
-    }
-
-    private void atualizarTabelaProduto() {
         jTableProduto.setModel(getDadosTabelaProduto());
     }
 
+//    private void atualizarTabelaProduto() {
+//        jTableProduto.setModel(getDadosTabelaProduto());
+//    }
     protected void persistir(Cliente c, String cpf) {
         JDDadosCliente dados = new JDDadosCliente(this, true);
         dados.setDados(c, cpf);
@@ -85,12 +85,12 @@ public class JFPrincipal extends javax.swing.JFrame {
     }
 
     protected void persistirProduto(Produto p, String cod) {
-        JDDadosProduto dados = new JDDadosProduto(this, true);
-        dados.setDados(p, cod);
-        dados.setVisible(true);
+        JDDadosProduto dados1 = new JDDadosProduto(this, true);
+        dados1.setDados(p, cod);
+        dados1.setVisible(true);
         // Modal -> Fica parado aqui até a janela "sumir"
-        if (dados.sucesso) {
-            pProduto.persistir(dados.getDados());
+        if (dados1.sucesso) {
+            cProduto.persistir(dados1.getDados());
         }
     }
 
@@ -99,7 +99,7 @@ public class JFPrincipal extends javax.swing.JFrame {
     }
 
     protected void removerProduto(String cpf) {
-        pProduto.remover(cpf);
+        cProduto.remover(cpf);
     }
 
     protected Cliente obter(String cpf) {
@@ -107,7 +107,7 @@ public class JFPrincipal extends javax.swing.JFrame {
     }
 
     protected Produto obterProduto(String cpf) {
-        return pProduto.obter(cpf);
+        return cProduto.obter(cpf);
     }
 
     protected void preActions() {
@@ -349,7 +349,7 @@ public class JFPrincipal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void mnuAtualizarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuAtualizarClienteActionPerformed
-        atualizarTabelaCliente();
+        atualizarTabela();
     }//GEN-LAST:event_mnuAtualizarClienteActionPerformed
 
     private void mnuIncluirClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuIncluirClienteActionPerformed
@@ -357,7 +357,7 @@ public class JFPrincipal extends javax.swing.JFrame {
         if (cpf != null) {
             if (!cpf.isEmpty()) {
                 persistir(null, cpf);
-                atualizarTabelaCliente();
+                atualizarTabela();
             }
         }
     }//GEN-LAST:event_mnuIncluirClienteActionPerformed
@@ -367,7 +367,7 @@ public class JFPrincipal extends javax.swing.JFrame {
         if (cpf != null) {
             if (!cpf.isEmpty()) {
                 persistir(obter(cpf), cpf);
-                atualizarTabelaCliente();
+                atualizarTabela();
             }
         }
     }//GEN-LAST:event_mnuAlterarClienteActionPerformed
@@ -377,7 +377,7 @@ public class JFPrincipal extends javax.swing.JFrame {
         if (cpf != null) {
             if (!cpf.isEmpty()) {
                 remover(cpf);
-                atualizarTabelaCliente();
+                atualizarTabela();
             }
         }
     }//GEN-LAST:event_mnuExcluirClienteActionPerformed
@@ -390,8 +390,8 @@ public class JFPrincipal extends javax.swing.JFrame {
         } catch (IOException | ClassNotFoundException ex) {
             Logger.getLogger(JFPrincipal.class.getName()).log(Level.SEVERE, null, ex);
         }
-        atualizarTabelaCliente();
-        atualizarTabelaProduto();
+        atualizarTabela();
+//        atualizarTabelaProduto();
     }//GEN-LAST:event_mnuArmazenarActionPerformed
 
     private void mnuRecuperarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuRecuperarActionPerformed
@@ -403,8 +403,8 @@ public class JFPrincipal extends javax.swing.JFrame {
             Logger.getLogger(JFPrincipal.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        atualizarTabelaCliente();
-        atualizarTabelaProduto();
+        atualizarTabela();
+//        atualizarTabelaProduto();
     }//GEN-LAST:event_mnuRecuperarActionPerformed
 
     private void mnuSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuSairActionPerformed
@@ -419,7 +419,8 @@ public class JFPrincipal extends javax.swing.JFrame {
             if (!cpf.isEmpty()) {
                 // Modal -> Fica parado aqui até a janela "sumir"
                 persistirProduto(null, "" + cpf);
-                atualizarTabelaProduto();
+//                atualizarTabelaProduto();
+                atualizarTabela();
             }
         }
     }//GEN-LAST:event_mnuIncluirProdutoActionPerformed
@@ -430,7 +431,8 @@ public class JFPrincipal extends javax.swing.JFrame {
         if (cpf != null) {
             if (!cpf.isEmpty()) {
                 persistirProduto(obterProduto(cpf), cpf);
-                atualizarTabelaProduto();
+//                atualizarTabelaProduto();
+                atualizarTabela();
             }
         }
     }//GEN-LAST:event_mnuAlterarProdutoActionPerformed
@@ -441,14 +443,16 @@ public class JFPrincipal extends javax.swing.JFrame {
         if (cpf != null) {
             if (!cpf.isEmpty()) {
                 removerProduto(cpf);
-                atualizarTabelaProduto();
+//                atualizarTabelaProduto();
+                atualizarTabela();
             }
         }
     }//GEN-LAST:event_mnuExcluirProdutoActionPerformed
 
     private void mnuAtualizarProdutoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuAtualizarProdutoActionPerformed
         // TODO add your handling code here:
-        atualizarTabelaProduto();
+//        atualizarTabelaProduto();
+        atualizarTabela();
     }//GEN-LAST:event_mnuAtualizarProdutoActionPerformed
 
     private void btmSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btmSairActionPerformed

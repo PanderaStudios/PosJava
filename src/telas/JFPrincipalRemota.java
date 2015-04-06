@@ -18,8 +18,12 @@ public class JFPrincipalRemota extends JFPrincipal {
     protected void remover(String cpf) {
         try {
             c1c.enviarTexto("R");
+            System.out.println(c1c.receberTexto());
+            System.out.println("Metodo local (Cliente) - remover clientes");
             c1c.enviarTexto(cpf);
         } catch (IOException ex) {
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(JFPrincipalRemota.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -28,7 +32,11 @@ public class JFPrincipalRemota extends JFPrincipal {
         try {
             c2p.enviarTexto("R");
             c2p.enviarTexto(cpf);
+            System.out.println(c1c.receberTexto());
+            System.out.println("Metodo local (Cliente) - remover produtos");
         } catch (IOException ex) {
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(JFPrincipalRemota.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -41,8 +49,12 @@ public class JFPrincipalRemota extends JFPrincipal {
         if (dadosC.sucesso) {
             try {
                 c1c.enviarTexto("P");
+                System.out.println(c1c.receberTexto());
+                System.out.println("Metodo local (Cliente) - persistir clientes");
                 c1c.enviarObjeto(dadosC.getDados());
             } catch (IOException ex) {
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(JFPrincipalRemota.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
@@ -55,8 +67,12 @@ public class JFPrincipalRemota extends JFPrincipal {
         if (dadosP.sucesso) {
             try {
                 c2p.enviarTexto("P");
+                System.out.println(c2p.receberTexto());
+                System.out.println("Metodo local (Cliente) - persistir produtos");
                 c2p.enviarObjeto(dadosP.getDados());
             } catch (IOException ex) {
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(JFPrincipalRemota.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
@@ -65,6 +81,8 @@ public class JFPrincipalRemota extends JFPrincipal {
     protected Cliente obter(String cpf) {
         try {
             c1c.enviarTexto("O");
+            System.out.println(c1c.receberTexto());
+            System.out.println("Metodo local (Cliente) - obter cliente");
             c1c.enviarTexto(cpf);
             return (Cliente) c1c.receberObjeto();
         } catch (IOException | ClassNotFoundException ex) {
@@ -76,6 +94,8 @@ public class JFPrincipalRemota extends JFPrincipal {
     protected Produto obterProduto(String cpf) {
         try {
             c2p.enviarTexto("O");
+            System.out.println(c2p.receberTexto());
+            System.out.println("Metodo local (Cliente) - obter produto");
             c2p.enviarTexto(cpf);
             return (Produto) c2p.receberObjeto();
         } catch (IOException | ClassNotFoundException ex) {
@@ -87,6 +107,8 @@ public class JFPrincipalRemota extends JFPrincipal {
     protected ArrayList<Cliente> obterTodos() {
         try {
             c1c.enviarTexto("T");
+            System.out.println(c1c.receberTexto());
+            System.out.println("Metodo local (Cliente) - obter todos clientes");
             return (ArrayList<Cliente>) c1c.receberObjeto();
         } catch (IOException | ClassNotFoundException ex) {
             return new ArrayList<>();
@@ -100,13 +122,16 @@ public class JFPrincipalRemota extends JFPrincipal {
     protected ArrayList<Produto> obterTodosProduto() {
         try {
             c2p.enviarTexto("T");
+            System.out.println(c2p.receberTexto());
+            System.out.println("Metodo local (Cliente) obter todos produtos");
             return (ArrayList<Produto>) c2p.receberObjeto();
         } catch (IOException | ClassNotFoundException ex) {
             return new ArrayList<>();
         }
+
     }
 
-        protected void armazenar() {
+    protected void armazenar() {
         try {
             c1c.enviarTexto("G");
             c2p.enviarTexto("G");
@@ -127,10 +152,10 @@ public class JFPrincipalRemota extends JFPrincipal {
     @Override
     protected void preActions() {
         try {
-            Socket s2c = new Socket("localhost", 5050);
-            Socket s1p = new Socket("localhost", 6060);
-            c1c = new ControleComunicacao(s2c);
-            c2p = new ControleComunicacao(s1p);
+            Socket s1c = new Socket("localhost", 5050);
+            Socket s2p = new Socket("localhost", 6060);
+            c1c = new ControleComunicacao(s1c);
+            c2p = new ControleComunicacao(s2p);
         } catch (Exception ex) {
         }
     }
@@ -144,5 +169,4 @@ public class JFPrincipalRemota extends JFPrincipal {
         });
     }
 
-    
 }

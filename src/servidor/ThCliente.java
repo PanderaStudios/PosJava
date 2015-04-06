@@ -27,32 +27,41 @@ public class ThCliente extends Thread {
                 String comando = c1.receberTexto();
 
                 if ("P".equals(comando)) {
-                    System.out.println("Cheguei Aqui ThCliente 1.0");
+                    System.out.println("Servidor ThCliente - persistir");
+                    c1.enviarTexto("Servidor ThCliente - persistir");
                     cCliente.persistir((Cliente) c1.receberObjeto());
                     ControleCliente.armazenar();
                 }
 
                 if ("R".equals(comando)) {
+                    System.out.println("Servidor ThCliente - remover");
+                    c1.enviarTexto("Servidor ThCliente - remover");
                     cCliente.remover(c1.receberTexto());
                     ControleCliente.armazenar();
                 }
 
                 if ("O".equals(comando)) {
+                    System.out.println("Servidor ThCliente - obter");
+                    c1.enviarTexto("Servidor ThCliente - obter");
                     String cpf = c1.receberTexto();
                     c1.enviarObjeto(cCliente.obter(cpf));
                 }
 
                 if ("T".equals(comando)) {
+                    System.out.println("Servidor ThCliente - obter todos");
+                    c1.enviarTexto("Servidor ThCliente - obter todos");
                     c1.enviarObjeto(cCliente.obterTodos());
                 }
-                
+
                 if ("G".equals(comando)) {
                     ControleCliente.armazenar();
                 }
-                
+
                 if ("C".equals(comando)) {
                     ControleCliente.carregar();
                 }
+
+//                c1.enviarObjeto(cCliente.obterTodos());
 
             }
         } catch (IOException | ClassNotFoundException ex) {
