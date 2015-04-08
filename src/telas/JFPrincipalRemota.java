@@ -13,12 +13,13 @@ import modelo.Produto;
 public class JFPrincipalRemota extends JFPrincipal {
 
     private  static String  ipServidor;
+    private final int NUMPORTAS = 3;
 
     public JFPrincipalRemota() {
       }
 
-    ControleComunicacao c1c;
-    ControleComunicacao c2p;
+    ControleComunicacao c1c[];// = new ControleComunicacao[NUMPORTAS];
+//    ControleComunicacao c2p;
 
     private void carregaTabelas() {
         ArrayList<Cliente> lista = new ArrayList<>();
@@ -32,10 +33,10 @@ public class JFPrincipalRemota extends JFPrincipal {
 
     protected void remover(String cpf) {
         try {
-            c1c.enviarTexto("R");
-            System.out.println(c1c.receberTexto());
+            c1c[0].enviarTexto("R");
+            System.out.println(c1c[0].receberTexto());
             System.out.println("Cliente - remover clientes");
-            c1c.enviarTexto(cpf);
+            c1c[0].enviarTexto(cpf);
         } catch (IOException ex) {
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(JFPrincipalRemota.class.getName()).log(Level.SEVERE, null, ex);
@@ -44,10 +45,10 @@ public class JFPrincipalRemota extends JFPrincipal {
 
     protected void removerProduto(String cpf) {
         try {
-            c2p.enviarTexto("R");
-            System.out.println(c1c.receberTexto());
+            c1c[1].enviarTexto("R");
+            System.out.println(c1c[0].receberTexto());
             System.out.println("Cliente - remover produtos");
-            c2p.enviarTexto(cpf);
+            c1c[1].enviarTexto(cpf);
         } catch (IOException ex) {
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(JFPrincipalRemota.class.getName()).log(Level.SEVERE, null, ex);
@@ -61,12 +62,11 @@ public class JFPrincipalRemota extends JFPrincipal {
         // Modal -> Fica parado aqui até a janela "sumir"
         if (dadosC.sucesso) {
             try {
-                c1c.enviarTexto("P");
-                System.out.println(c1c.receberTexto());
+                c1c[0].enviarTexto("P");
+                System.out.println(c1c[0].receberTexto());
                 System.out.println("Cliente - persistir clientes");
-                c1c.enviarObjeto(dadosC.getDados());
-            } catch (IOException ex) {
-            } catch (ClassNotFoundException ex) {
+                c1c[0].enviarObjeto(dadosC.getDados());
+            } catch (NullPointerException | IOException | ClassNotFoundException ex) {
                 Logger.getLogger(JFPrincipalRemota.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
@@ -79,10 +79,10 @@ public class JFPrincipalRemota extends JFPrincipal {
         // Modal -> Fica parado aqui até a janela "sumir"
         if (dadosP.sucesso) {
             try {
-                c2p.enviarTexto("P");
-                System.out.println(c2p.receberTexto());
+                c1c[1].enviarTexto("P");
+                System.out.println(c1c[1].receberTexto());
                 System.out.println("Cliente - persistir produtos");
-                c2p.enviarObjeto(dadosP.getDados());
+                c1c[1].enviarObjeto(dadosP.getDados());
             } catch (IOException ex) {
             } catch (ClassNotFoundException ex) {
                 Logger.getLogger(JFPrincipalRemota.class.getName()).log(Level.SEVERE, null, ex);
@@ -92,11 +92,11 @@ public class JFPrincipalRemota extends JFPrincipal {
 
     protected Cliente obter(String cpf) {
         try {
-            c1c.enviarTexto("O");
-            System.out.println(c1c.receberTexto());
+            c1c[0].enviarTexto("O");
+            System.out.println(c1c[0].receberTexto());
             System.out.println("Cliente - obter cliente");
-            c1c.enviarTexto(cpf);
-            return (Cliente) c1c.receberObjeto();
+            c1c[0].enviarTexto(cpf);
+            return (Cliente) c1c[0].receberObjeto();
         } catch (IOException | ClassNotFoundException ex) {
             return null;
         }
@@ -104,11 +104,11 @@ public class JFPrincipalRemota extends JFPrincipal {
 
     protected Produto obterProduto(String cpf) {
         try {
-            c2p.enviarTexto("O");
-            System.out.println(c2p.receberTexto());
+            c1c[1].enviarTexto("O");
+            System.out.println(c1c[1].receberTexto());
             System.out.println("Cliente - obter produto");
-            c2p.enviarTexto(cpf);
-            return (Produto) c2p.receberObjeto();
+            c1c[1].enviarTexto(cpf);
+            return (Produto) c1c[1].receberObjeto();
         } catch (IOException | ClassNotFoundException ex) {
             return null;
         }
@@ -116,10 +116,10 @@ public class JFPrincipalRemota extends JFPrincipal {
 
     protected ArrayList<Cliente> obterTodos() {
         try {
-            c1c.enviarTexto("T");
-            System.out.println(c1c.receberTexto());
+            c1c[0].enviarTexto("T");
+            System.out.println(c1c[0].receberTexto());
             System.out.println("Cliente - obter todos clientes");
-            return (ArrayList<Cliente>) c1c.receberObjeto();
+            return (ArrayList<Cliente>) c1c[0].receberObjeto();
         } catch (NullPointerException | IOException | ClassNotFoundException ex) {
             return new ArrayList<>();
         }
@@ -127,10 +127,10 @@ public class JFPrincipalRemota extends JFPrincipal {
 
     protected ArrayList<Produto> obterTodosProdutos() {
         try {
-            c2p.enviarTexto("T");
-            System.out.println(c2p.receberTexto());
+            c1c[1].enviarTexto("T");
+            System.out.println(c1c[1].receberTexto());
             System.out.println("Cliente - obter todos produtos");
-            return (ArrayList<Produto>) c2p.receberObjeto();
+            return (ArrayList<Produto>) c1c[1].receberObjeto();
         } catch (NullPointerException | IOException | ClassNotFoundException ex) {
             return new ArrayList<>();
         }
@@ -139,8 +139,8 @@ public class JFPrincipalRemota extends JFPrincipal {
 
     protected void armazenar() {
         try {
-            c1c.enviarTexto("G");
-            c2p.enviarTexto("G");
+            c1c[0].enviarTexto("G");
+            c1c[1].enviarTexto("G");
         } catch (IOException ex) {
             Logger.getLogger(JFPrincipalRemota.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -148,8 +148,8 @@ public class JFPrincipalRemota extends JFPrincipal {
 
     protected void carregar() {
         try {
-            c1c.enviarTexto("C");
-            c2p.enviarTexto("C");
+            c1c[0].enviarTexto("C");
+            c1c[1].enviarTexto("C");
         } catch (IOException ex) {
             Logger.getLogger(JFPrincipalRemota.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -165,8 +165,10 @@ public class JFPrincipalRemota extends JFPrincipal {
             Socket s2p = new Socket(ipServidor, 6060);
             System.out.println("Conectado Porta 6060> " + s2p.isConnected());
 
-            c1c = new ControleComunicacao(s1c);
-            c2p = new ControleComunicacao(s2p);
+            for(int i=0;i<NUMPORTAS;i++){
+            c1c[i] = new ControleComunicacao(s1c);
+            }
+//            c2p = new ControleComunicacao(s2p);
         } catch (Exception ex) {
         }
     }

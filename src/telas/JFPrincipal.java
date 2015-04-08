@@ -7,6 +7,7 @@ package telas;
 
 import controle.ControleCliente;
 import controle.ControleProduto;
+import controle.ControlePedido;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -16,6 +17,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import modelo.Cliente;
 import modelo.Produto;
+import modelo.Pedido;
 
 /**
  *
@@ -29,12 +31,19 @@ public class JFPrincipal extends javax.swing.JFrame {
     protected ControleProduto cProduto
             = new ControleProduto();
 
+    protected ControlePedido cPedido
+            = new ControlePedido();
+
     protected ArrayList<Cliente> obterTodos() {
         return cCliente.obterTodos();
     }
 
     protected ArrayList<Produto> obterTodosProdutos() {
         return cProduto.obterTodos();
+    }
+
+    protected ArrayList<Pedido> obterTodosPedidos() {
+        return cPedido.obterTodos();
     }
 
     protected TableModel getDadosTabela() {
@@ -65,9 +74,24 @@ public class JFPrincipal extends javax.swing.JFrame {
         return new DefaultTableModel(valores1, titulos);
     }
 
+    protected TableModel getDadosTabelaPedido() {
+        ArrayList<Pedido> lista = obterTodosPedidos();
+        String[] titulos
+                = {"COD", "Nome", "Produto", "Produto"};
+        Object[][] valores1 = new Object[lista.size()][4];
+        for (int i = 0; i < lista.size(); i++) {
+            valores1[i][0] = lista.get(i).getCodPed();
+            valores1[i][1] = lista.get(i).getCodCli();
+            valores1[i][2] = lista.get(i).getCodProdA();
+            valores1[i][3] = lista.get(i).getCodProdB();
+        }
+        return new DefaultTableModel(valores1, titulos);
+    }
+
     private void atualizarTabela() {
         jTableCliente.setModel(getDadosTabela());
         jTableProduto.setModel(getDadosTabelaProduto());
+        jTablePedido.setModel(getDadosTabelaPedido());
     }
 
 //    private void atualizarTabelaProduto() {
@@ -93,6 +117,16 @@ public class JFPrincipal extends javax.swing.JFrame {
         }
     }
 
+    protected void persistirPedido(Pedido ped, String cod) {
+        JDDadosPedidos dados = new JDDadosPedidos(this, true);
+        dados.setDados(ped, cod);
+        dados.setVisible(true);
+        // Modal -> Fica parado aqui até a janela "sumir"
+        if (dados.sucesso) {
+            cPedido.persistir(dados.getDados());
+        }
+    }
+
     protected void remover(String cpf) {
         cCliente.remover(cpf);
     }
@@ -101,12 +135,20 @@ public class JFPrincipal extends javax.swing.JFrame {
         cProduto.remover(cpf);
     }
 
+    protected void removerPedido(String cod) {
+        cPedido.remover(cod);
+    }
+
     protected Cliente obter(String cpf) {
         return cCliente.obter(cpf);
     }
 
     protected Produto obterProduto(String cpf) {
         return cProduto.obter(cpf);
+    }
+
+    protected Pedido obterPedido(String cod) {
+        return cPedido.obter(cod);
     }
 
     protected void preActions() {
@@ -138,7 +180,7 @@ public class JFPrincipal extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
-        jTableCliente1 = new javax.swing.JTable();
+        jTablePedido = new javax.swing.JTable();
         jLabel4 = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu2 = new javax.swing.JMenu();
@@ -190,8 +232,8 @@ public class JFPrincipal extends javax.swing.JFrame {
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel3.setText("CONTROLE DE VENDAS");
 
-        jTableCliente1.setModel(getDadosTabela());
-        jScrollPane3.setViewportView(jTableCliente1);
+        jTablePedido.setModel(getDadosTabelaPedido());
+        jScrollPane3.setViewportView(jTablePedido);
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel4.setText("PEDIDOS");
@@ -481,7 +523,6 @@ public class JFPrincipal extends javax.swing.JFrame {
         if (cpf != null) {
             if (!cpf.isEmpty()) {
                 persistirProduto(obterProduto(cpf), cpf);
-//                atualizarTabelaProduto();
                 atualizarTabela();
             }
         }
@@ -493,7 +534,6 @@ public class JFPrincipal extends javax.swing.JFrame {
         if (cpf != null) {
             if (!cpf.isEmpty()) {
                 removerProduto(cpf);
-//                atualizarTabelaProduto();
                 atualizarTabela();
             }
         }
@@ -514,7 +554,7 @@ public class JFPrincipal extends javax.swing.JFrame {
         if (cod != null) {
             if (!cod.isEmpty()) {
                 // Modal -> Fica parado aqui até a janela "sumir"
-                persistirProduto(null, "" + cod);
+                persistirPedido(null, "" + cod);
                 atualizarTabela();
             }
         }
@@ -523,10 +563,24 @@ public class JFPrincipal extends javax.swing.JFrame {
 
     private void mnuAlterarPedidosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuAlterarPedidosActionPerformed
         // TODO add your handling code here:
+        String cod = entraCPF(false); // recebera codigo digitado
+        if (cod != null) {
+            if (!cod.isEmpty()) {
+                persistirPedido(obterPedido(cod), cod);
+                atualizarTabela();
+            }
+        }
     }//GEN-LAST:event_mnuAlterarPedidosActionPerformed
 
     private void mnuExcluirPedidosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuExcluirPedidosActionPerformed
         // TODO add your handling code here:
+        String cod = entraCPF(false); // recebera codigo digitado
+        if (cod != null) {
+            if (!cod.isEmpty()) {
+                removerPedido(cod);
+                atualizarTabela();
+            }
+        }
     }//GEN-LAST:event_mnuExcluirPedidosActionPerformed
 
     private void sairPgm() {
@@ -655,7 +709,7 @@ public class JFPrincipal extends javax.swing.JFrame {
     private javax.swing.JPopupMenu.Separator jSeparator3;
     private javax.swing.JPopupMenu.Separator jSeparator4;
     private javax.swing.JTable jTableCliente;
-    private javax.swing.JTable jTableCliente1;
+    private javax.swing.JTable jTablePedido;
     private javax.swing.JTable jTableProduto;
     private javax.swing.JMenuItem mnuAlterarCliente;
     private javax.swing.JMenuItem mnuAlterarPedidos;

@@ -18,10 +18,26 @@ public class ControleCliente {
 
     private static HashMap<String, Cliente> bancoClientes = new HashMap<>();
 
+    private static final int NUMPORTAS = 3;
+    private static int[] portas;
+
     public ControleCliente() { //throws IOException, ClassNotFoundException{
         // ControleCliente.carregar();
-
+        portas = new int[NUMPORTAS];
+        //carrega array com as portas dos arquivos a partir da 5050
+        for (int i = 0; i < NUMPORTAS; i++) {
+            portas[i] = 5050 + i;
+        }
     }
+
+    public static int getNUMPORTAS() {
+        return NUMPORTAS;
+    }
+
+    public static int[] getPortas() {
+        return portas;
+    }
+
     /**
      * @Author Heraldo variavel dir criada apenas uma vez para ser reutilizada
      * em toda a classe
@@ -61,11 +77,11 @@ public class ControleCliente {
         if (!file.exists()) {
             dir = "";
             while (dir.isEmpty() || (!dir.equalsIgnoreCase("c") && !dir.equalsIgnoreCase("d"))) {
-                 if ((dir = JOptionPane.showInputDialog(null, "Informe o Disco do arquivo Cliente (Ex. C ou D).",
+                if ((dir = JOptionPane.showInputDialog(null, "Informe o Disco do arquivo Cliente (Ex. C ou D).",
                         "MSG Servidor", JOptionPane.INFORMATION_MESSAGE)) == null) {
                     dir = "d";
                 }
-           }
+            }
 
             file.renameTo(new File(dir + pasta + CLIENTES + arquivo));
 
