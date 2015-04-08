@@ -11,7 +11,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
@@ -137,28 +136,37 @@ public class JFPrincipal extends javax.swing.JFrame {
         btmSair = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        jTableCliente1 = new javax.swing.JTable();
+        jLabel4 = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
-        jMenu1 = new javax.swing.JMenu();
-        mnuIncluirCliente = new javax.swing.JMenuItem();
-        mnuAlterarCliente = new javax.swing.JMenuItem();
-        mnuExcluirCliente = new javax.swing.JMenuItem();
-        jSeparator1 = new javax.swing.JPopupMenu.Separator();
-        mnuAtualizarCliente = new javax.swing.JMenuItem();
-        jMenuProdutos = new javax.swing.JMenu();
-        mnuIncluirProduto = new javax.swing.JMenuItem();
-        mnuAlterarProduto = new javax.swing.JMenuItem();
-        mnuExcluirProduto = new javax.swing.JMenuItem();
-        jSeparator3 = new javax.swing.JPopupMenu.Separator();
-        mnuAtualizarProduto = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         jRadioConectar = new javax.swing.JRadioButtonMenuItem();
         jRadioDesconectar = new javax.swing.JRadioButtonMenuItem();
         mnuArmazenar = new javax.swing.JMenuItem();
         mnuRecuperar = new javax.swing.JMenuItem();
+        mnuAtualizarCliente = new javax.swing.JMenuItem();
         jSeparator2 = new javax.swing.JPopupMenu.Separator();
         mnuSair = new javax.swing.JMenuItem();
+        jMenuPedidos = new javax.swing.JMenu();
+        mnuIncluirPedidos = new javax.swing.JMenuItem();
+        mnuAlterarPedidos = new javax.swing.JMenuItem();
+        mnuExcluirPedidos = new javax.swing.JMenuItem();
+        jSeparator4 = new javax.swing.JPopupMenu.Separator();
+        jMenu1 = new javax.swing.JMenu();
+        mnuIncluirCliente = new javax.swing.JMenuItem();
+        mnuAlterarCliente = new javax.swing.JMenuItem();
+        mnuExcluirCliente = new javax.swing.JMenuItem();
+        jSeparator1 = new javax.swing.JPopupMenu.Separator();
+        jMenuProdutos = new javax.swing.JMenu();
+        mnuIncluirProduto = new javax.swing.JMenuItem();
+        mnuAlterarProduto = new javax.swing.JMenuItem();
+        mnuExcluirProduto = new javax.swing.JMenuItem();
+        jSeparator3 = new javax.swing.JPopupMenu.Separator();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Pandera Studios (Cliente)");
 
         jTableCliente.setModel(getDadosTabela());
         jScrollPane1.setViewportView(jTableCliente);
@@ -179,83 +187,14 @@ public class JFPrincipal extends javax.swing.JFrame {
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel2.setText("PRODUTOS");
 
-        jMenu1.setText("Clientes");
+        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel3.setText("CONTROLE DE VENDAS");
 
-        mnuIncluirCliente.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_I, java.awt.event.InputEvent.ALT_MASK));
-        mnuIncluirCliente.setText("Incluir");
-        mnuIncluirCliente.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mnuIncluirClienteActionPerformed(evt);
-            }
-        });
-        jMenu1.add(mnuIncluirCliente);
+        jTableCliente1.setModel(getDadosTabela());
+        jScrollPane3.setViewportView(jTableCliente1);
 
-        mnuAlterarCliente.setText("Alterar");
-        mnuAlterarCliente.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mnuAlterarClienteActionPerformed(evt);
-            }
-        });
-        jMenu1.add(mnuAlterarCliente);
-
-        mnuExcluirCliente.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_E, java.awt.event.InputEvent.ALT_MASK));
-        mnuExcluirCliente.setText("Excluir");
-        mnuExcluirCliente.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mnuExcluirClienteActionPerformed(evt);
-            }
-        });
-        jMenu1.add(mnuExcluirCliente);
-        jMenu1.add(jSeparator1);
-
-        mnuAtualizarCliente.setText("Atualizar Tela");
-        mnuAtualizarCliente.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mnuAtualizarClienteActionPerformed(evt);
-            }
-        });
-        jMenu1.add(mnuAtualizarCliente);
-
-        jMenuBar1.add(jMenu1);
-
-        jMenuProdutos.setText("Produtos");
-
-        mnuIncluirProduto.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_I, java.awt.event.InputEvent.ALT_MASK));
-        mnuIncluirProduto.setText("Incluir");
-        mnuIncluirProduto.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mnuIncluirProdutoActionPerformed(evt);
-            }
-        });
-        jMenuProdutos.add(mnuIncluirProduto);
-
-        mnuAlterarProduto.setText("Alterar");
-        mnuAlterarProduto.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mnuAlterarProdutoActionPerformed(evt);
-            }
-        });
-        jMenuProdutos.add(mnuAlterarProduto);
-
-        mnuExcluirProduto.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_E, java.awt.event.InputEvent.ALT_MASK));
-        mnuExcluirProduto.setText("Excluir");
-        mnuExcluirProduto.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mnuExcluirProdutoActionPerformed(evt);
-            }
-        });
-        jMenuProdutos.add(mnuExcluirProduto);
-        jMenuProdutos.add(jSeparator3);
-
-        mnuAtualizarProduto.setText("Atualizar Tela");
-        mnuAtualizarProduto.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mnuAtualizarProdutoActionPerformed(evt);
-            }
-        });
-        jMenuProdutos.add(mnuAtualizarProduto);
-
-        jMenuBar1.add(jMenuProdutos);
+        jLabel4.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel4.setText("PEDIDOS");
 
         jMenu2.setText("Conectar");
 
@@ -289,6 +228,14 @@ public class JFPrincipal extends javax.swing.JFrame {
             }
         });
         jMenu2.add(mnuRecuperar);
+
+        mnuAtualizarCliente.setText("Atualizar Tela");
+        mnuAtualizarCliente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuAtualizarClienteActionPerformed(evt);
+            }
+        });
+        jMenu2.add(mnuAtualizarCliente);
         jMenu2.add(jSeparator2);
 
         mnuSair.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.ALT_MASK | java.awt.event.InputEvent.CTRL_MASK));
@@ -302,45 +249,149 @@ public class JFPrincipal extends javax.swing.JFrame {
 
         jMenuBar1.add(jMenu2);
 
+        jMenuPedidos.setText("Pedidos");
+        jMenuPedidos.setActionCommand("");
+
+        mnuIncluirPedidos.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_I, java.awt.event.InputEvent.ALT_MASK));
+        mnuIncluirPedidos.setText("Incluir");
+        mnuIncluirPedidos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuIncluirPedidosActionPerformed(evt);
+            }
+        });
+        jMenuPedidos.add(mnuIncluirPedidos);
+
+        mnuAlterarPedidos.setText("Alterar");
+        mnuAlterarPedidos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuAlterarPedidosActionPerformed(evt);
+            }
+        });
+        jMenuPedidos.add(mnuAlterarPedidos);
+
+        mnuExcluirPedidos.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_E, java.awt.event.InputEvent.ALT_MASK));
+        mnuExcluirPedidos.setText("Excluir");
+        mnuExcluirPedidos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuExcluirPedidosActionPerformed(evt);
+            }
+        });
+        jMenuPedidos.add(mnuExcluirPedidos);
+        jMenuPedidos.add(jSeparator4);
+
+        jMenuBar1.add(jMenuPedidos);
+
+        jMenu1.setText("Clientes");
+
+        mnuIncluirCliente.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_I, java.awt.event.InputEvent.ALT_MASK));
+        mnuIncluirCliente.setText("Incluir");
+        mnuIncluirCliente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuIncluirClienteActionPerformed(evt);
+            }
+        });
+        jMenu1.add(mnuIncluirCliente);
+
+        mnuAlterarCliente.setText("Alterar");
+        mnuAlterarCliente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuAlterarClienteActionPerformed(evt);
+            }
+        });
+        jMenu1.add(mnuAlterarCliente);
+
+        mnuExcluirCliente.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_E, java.awt.event.InputEvent.ALT_MASK));
+        mnuExcluirCliente.setText("Excluir");
+        mnuExcluirCliente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuExcluirClienteActionPerformed(evt);
+            }
+        });
+        jMenu1.add(mnuExcluirCliente);
+        jMenu1.add(jSeparator1);
+
+        jMenuBar1.add(jMenu1);
+
+        jMenuProdutos.setText("Produtos");
+
+        mnuIncluirProduto.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_I, java.awt.event.InputEvent.ALT_MASK));
+        mnuIncluirProduto.setText("Incluir");
+        mnuIncluirProduto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuIncluirProdutoActionPerformed(evt);
+            }
+        });
+        jMenuProdutos.add(mnuIncluirProduto);
+
+        mnuAlterarProduto.setText("Alterar");
+        mnuAlterarProduto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuAlterarProdutoActionPerformed(evt);
+            }
+        });
+        jMenuProdutos.add(mnuAlterarProduto);
+
+        mnuExcluirProduto.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_E, java.awt.event.InputEvent.ALT_MASK));
+        mnuExcluirProduto.setText("Excluir");
+        mnuExcluirProduto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuExcluirProdutoActionPerformed(evt);
+            }
+        });
+        jMenuProdutos.add(mnuExcluirProduto);
+        jMenuProdutos.add(jSeparator3);
+
+        jMenuBar1.add(jMenuProdutos);
+
         setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(28, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 196, Short.MAX_VALUE)
-                        .addComponent(jLabel2)
-                        .addGap(162, 162, 162))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(btmSair)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(18, 18, 18)
+                                .addComponent(jLabel4)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel3)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jLabel1)
+                                        .addGap(175, 175, 175)
+                                        .addComponent(jLabel2)))
+                                .addGap(84, 84, 84)))
+                        .addContainerGap())
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(btmSair))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap())
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 248, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 205, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(30, 30, 30))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addGap(19, 19, 19)
+                .addComponent(jLabel3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 79, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
+                    .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel2)
-                        .addGap(11, 11, 11)))
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 281, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 281, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jLabel4)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 281, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 281, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 281, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
                 .addComponent(btmSair)
                 .addContainerGap())
         );
@@ -419,7 +470,6 @@ public class JFPrincipal extends javax.swing.JFrame {
             if (!cpf.isEmpty()) {
                 // Modal -> Fica parado aqui até a janela "sumir"
                 persistirProduto(null, "" + cpf);
-//                atualizarTabelaProduto();
                 atualizarTabela();
             }
         }
@@ -449,12 +499,6 @@ public class JFPrincipal extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_mnuExcluirProdutoActionPerformed
 
-    private void mnuAtualizarProdutoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuAtualizarProdutoActionPerformed
-        // TODO add your handling code here:
-//        atualizarTabelaProduto();
-        atualizarTabela();
-    }//GEN-LAST:event_mnuAtualizarProdutoActionPerformed
-
     private void btmSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btmSairActionPerformed
         // TODO add your handling code here:
         sairPgm();
@@ -463,6 +507,27 @@ public class JFPrincipal extends javax.swing.JFrame {
     private void jRadioDesconectarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioDesconectarActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jRadioDesconectarActionPerformed
+
+    private void mnuIncluirPedidosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuIncluirPedidosActionPerformed
+        // TODO add your handling code here:
+                String cod = entraCPF(false); // recebera codigo digitado
+        if (cod != null) {
+            if (!cod.isEmpty()) {
+                // Modal -> Fica parado aqui até a janela "sumir"
+                persistirProduto(null, "" + cod);
+                atualizarTabela();
+            }
+        }
+
+    }//GEN-LAST:event_mnuIncluirPedidosActionPerformed
+
+    private void mnuAlterarPedidosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuAlterarPedidosActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_mnuAlterarPedidosActionPerformed
+
+    private void mnuExcluirPedidosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuExcluirPedidosActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_mnuExcluirPedidosActionPerformed
 
     private void sairPgm() {
         // TODO add your handling code here:
@@ -573,27 +638,35 @@ public class JFPrincipal extends javax.swing.JFrame {
     private javax.swing.JButton btmSair;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenu jMenuPedidos;
     private javax.swing.JMenu jMenuProdutos;
     private javax.swing.JRadioButtonMenuItem jRadioConectar;
     private javax.swing.JRadioButtonMenuItem jRadioDesconectar;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JPopupMenu.Separator jSeparator2;
     private javax.swing.JPopupMenu.Separator jSeparator3;
+    private javax.swing.JPopupMenu.Separator jSeparator4;
     private javax.swing.JTable jTableCliente;
+    private javax.swing.JTable jTableCliente1;
     private javax.swing.JTable jTableProduto;
     private javax.swing.JMenuItem mnuAlterarCliente;
+    private javax.swing.JMenuItem mnuAlterarPedidos;
     private javax.swing.JMenuItem mnuAlterarProduto;
     private javax.swing.JMenuItem mnuArmazenar;
     private javax.swing.JMenuItem mnuAtualizarCliente;
-    private javax.swing.JMenuItem mnuAtualizarProduto;
     private javax.swing.JMenuItem mnuExcluirCliente;
+    private javax.swing.JMenuItem mnuExcluirPedidos;
     private javax.swing.JMenuItem mnuExcluirProduto;
     private javax.swing.JMenuItem mnuIncluirCliente;
+    private javax.swing.JMenuItem mnuIncluirPedidos;
     private javax.swing.JMenuItem mnuIncluirProduto;
     private javax.swing.JMenuItem mnuRecuperar;
     private javax.swing.JMenuItem mnuSair;

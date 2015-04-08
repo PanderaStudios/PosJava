@@ -18,7 +18,7 @@ public class JFPrinicipalServidor extends javax.swing.JFrame {
     private int numClientes;
     private DefaultListModel<String> clienteON;
     private DefaultListModel<String> clienteOFF;
-    ServidorPlay servico;
+    ThServidor servico;
 
     /**
      * Creates new form JFPrinicipalServidor
@@ -37,7 +37,7 @@ public class JFPrinicipalServidor extends javax.swing.JFrame {
     }
 
     private void preActions() {
-        servico = new ServidorPlay(clienteON, clienteOFF, txtStatus, txtNumClientes);
+        servico = new ThServidor(clienteON, clienteOFF, txtStatus, txtNumClientes);
         servico.start();
     }
 

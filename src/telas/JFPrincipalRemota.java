@@ -4,6 +4,7 @@ import comum.controle.ControleComunicacao;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import modelo.Cliente;
@@ -11,9 +12,10 @@ import modelo.Produto;
 
 public class JFPrincipalRemota extends JFPrincipal {
 
+    private  static String  ipServidor;
+
     public JFPrincipalRemota() {
-//        carregaTabelas();
-    }
+      }
 
     ControleComunicacao c1c;
     ControleComunicacao c2p;
@@ -157,10 +159,10 @@ public class JFPrincipalRemota extends JFPrincipal {
     protected void preActions() {
         try {
             System.out.println("Metodo local (Cliente) preActions");
-            Socket s1c = new Socket("localhost", 5050);
+            Socket s1c = new Socket(ipServidor, 5050);
             System.out.println("Conectado Porta 5050> " + s1c.isConnected());
-            
-            Socket s2p = new Socket("localhost", 6060);
+
+            Socket s2p = new Socket(ipServidor, 6060);
             System.out.println("Conectado Porta 6060> " + s2p.isConnected());
 
             c1c = new ControleComunicacao(s1c);
@@ -171,6 +173,10 @@ public class JFPrincipalRemota extends JFPrincipal {
 
     public static void main(String args[]) {
 
+        if (args.length == 0) 
+            ipServidor = "localhost";
+        else
+            ipServidor = Arrays.toString(args);
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> {
